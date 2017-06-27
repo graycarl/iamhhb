@@ -15,6 +15,7 @@
 
 ## TODO
 
+- Disable user/group management in admin
 - Support reStructuredText
 - Support Post.status
   - draft

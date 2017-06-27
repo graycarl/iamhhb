@@ -1,6 +1,15 @@
-from django.http import HttpResponse
+from django.views import generic
+from .models import Post
 
 
-# Create your views here.
-def index(request):
-    return HttpResponse('This is index page of blog')
+class PostListView(generic.ListView):
+
+    template_name = 'blog/index.html'
+
+    def get_queryset(self):
+        return Post.objects.order_by('-created_at')[:5]
+
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = 'blog/post.html'
