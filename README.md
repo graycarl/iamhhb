@@ -16,3 +16,7 @@
 ## TODO
 
 - Support reStructuredText
+- Support Post.status
+  - draft
+  - published
+  - hidden
