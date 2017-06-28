@@ -1,3 +1,4 @@
+import mistune
 from django.db import models
 
 
@@ -14,3 +15,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.slug
+
+    @property
+    def html_content(self):
+        return mistune.markdown(self.content)
