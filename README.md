@@ -21,3 +21,5 @@
   - draft
   - published
   - hidden
+- Internationalization and localization
+- RSS/Atom
