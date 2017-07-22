@@ -5,9 +5,6 @@
 ## TODO
 
 - Adapt to Django
-- Run on heroku
-  - Automatic migrate
-  - Node Buildpack
 - Disable user/group management in admin
 - Support reStructuredText
 - Support Post.status
@@ -20,6 +17,8 @@
 
 
 ## Deploy Notes
+
+### Bower
 
 使用了 Heroku 的两个 BuildPacks:
 
@@ -44,3 +43,9 @@ $ heroku buildpacks -a iamhhb
   }
 }
 ```
+
+### Migrate
+
+在 Procfile 里面添加了 Realse 命令来执行 Migration.
+
+see: https://devcenter.heroku.com/articles/release-phase#getting-started
