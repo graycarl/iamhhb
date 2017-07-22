@@ -1,0 +1,20 @@
+{
+  "name": "IamHHB",
+  "authors": [
+    "Hongbo He <hhbcarl@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "semantic-ui#^2.2.10"
+  }
+}

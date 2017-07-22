@@ -6,6 +6,8 @@
 
 - Adapt to Django
 - Run on heroku
+  - Automatic migrate
+  - Node Buildpack
 - Disable user/group management in admin
 - Support reStructuredText
 - Support Post.status
