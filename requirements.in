@@ -2,3 +2,6 @@ django
 mock
 pip-tools
 mistune
+dj-database-url
+gunicorn
+psycopg2
