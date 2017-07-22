@@ -4,6 +4,8 @@
 
 ## TODO
 
+- Adapt to Django
+- Run on heroku
 - Disable user/group management in admin
 - Support reStructuredText
 - Support Post.status
