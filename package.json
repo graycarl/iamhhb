@@ -4,7 +4,6 @@
   "description": "这是一个个人网站的实现，重新做这么个简单的项目，主要是为了配合最近的学习而进行的练习。",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "node_modules/bower/bin/bower install"
   },
   "repository": {

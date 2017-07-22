@@ -17,3 +17,30 @@
 - Internationalization and localization
 - RSS/Atom
 - Travis CI
+
+
+## Deploy Notes
+
+使用了 Heroku 的两个 BuildPacks:
+
+```
+$ heroku buildpacks -a iamhhb
+=== iamhhb Buildpack URLs
+1. heroku/nodejs
+2. heroku/python
+```
+
+让 Bower 正常工作，创建了 Package.json:
+
+```json
+{
+  ...
+  "scripts": {
+    "postinstall": "node_modules/bower/bin/bower install"
+  },
+  ...
+  "dependencies": {
+    "bower": "^1.8.0"
+  }
+}
+```
