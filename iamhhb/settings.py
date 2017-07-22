@@ -28,7 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'iamhhb.herokuapp.com',
-    'graycarl.me'
+    'x.graycarl.me',
+    'graycarl.me',
+    'localhost'
 ]
 
 
