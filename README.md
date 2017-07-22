@@ -12,3 +12,4 @@
   - hidden
 - Internationalization and localization
 - RSS/Atom
+- Travis CI

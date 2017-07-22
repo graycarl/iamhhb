@@ -62,7 +62,10 @@ ROOT_URLCONF = 'iamhhb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'html', 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'html', 'templates'),
+            os.path.join(BASE_DIR, 'iamhhb', 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
