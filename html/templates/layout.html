@@ -1,15 +1,15 @@
 {% load static %}
+{% load pipeline %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{% static "libs/semantic/semantic.min.css" %}">
-    <link rel="stylesheet" href="{% static "style.css" %}">
-    <script type="text/javascript" src="{% static "libs/jquery/jquery.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "libs/semantic/semantic.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "app.js" %}"></script>
+    {% stylesheet 'libs' %}
+    {% stylesheet 'site' %}
+    {% javascript 'libs' %}
+    {% javascript 'site' %}
     {% block headtail %} {% endblock %}
     <title>{{ title }}</title>
 </head>

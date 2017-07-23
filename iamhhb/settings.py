@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'tl)&r5*9t8fy(ov_-9-1scj$p%6&giitcd7ua^=3!nh&n-4eyn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG') == 'true'
 
 ALLOWED_HOSTS = [
     'iamhhb.herokuapp.com',
@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
+    'pipeline',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,7 +131,51 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'var', 'statics')
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'html', 'static')
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'var', 'statics')
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+# Pipeline
+PIPELINE = {
+    'JAVASCRIPT': {
+        'libs': {
+            'source_filenames': (
+              'libs/jquery/jquery.js',
+              'libs/semantic/semantic.js'
+            ),
+            'output_filename': 'libs.js',
+        },
+        'site': {
+            'source_filenames': (
+                'site.js',
+            ),
+            'output_filename': 'site.js'
+        }
+    },
+    'STYLESHEETS': {
+        'libs': {
+            'source_filenames': (
+                'libs/semantic/semantic.css',
+            ),
+            'output_filename': 'libs.css'
+        },
+        'site': {
+            'source_filenames': (
+                'site.scss',
+            ),
+            'output_filename': 'site.css'
+        }
+    },
+    'COMPILERS': [
+        'iamhhb.libs.pipeline.LibSassCompiler'
+    ],
+    'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor'
+}
