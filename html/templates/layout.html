@@ -13,7 +13,7 @@
     {% block headtail %} {% endblock %}
     <title>{{ title }}</title>
 </head>
-<body id="request.name">
+<body>
     <div class="ui fixed pointing menu">
         <div class="ui container">
             <a href="/" class="header item active">
@@ -26,7 +26,7 @@
             <a href="/about-me" class="item right">About Me</a>
         </div>
     </div>
-    <div class="ui main-content container">
+    <div id="{% block container_id %}{% endblock %}" class="ui main-content container">
         {% block content %}
         {% endblock %}
     </div>

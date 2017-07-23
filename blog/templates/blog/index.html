@@ -1,7 +1,19 @@
-{% extends "layout.html" %}
-
-{% block title %} aaaa {% endblock %}
+{% extends "blog/base.html" %}
 
 {% block content %}
-    This is index page of blog.
+<div class="ui very relaxed items blog-list">
+    {% for blog in object_list %}
+    <div class="item">
+        <div class="image">
+            {{ blog.created_at|date:"M d, Y" }}
+        </div>
+        <div class="content">
+            <a href="{{ 'xx' }}" class="header">
+                {{ blog.title }}
+            </a>
+            <p class="description">{{ blog.slug }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
