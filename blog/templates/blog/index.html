@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="ui very relaxed items blog-list">
-    {% for blog in object_list %}
+    {% for post in object_list %}
     <div class="item">
         <div class="image">
-            {{ blog.created_at|date:"M d, Y" }}
+            {{ post.created_at|date:"M d, Y" }}
         </div>
         <div class="content">
-            <a href="{{ 'xx' }}" class="header">
-                {{ blog.title }}
+            <a href="{% url 'blog:post' post.slug %}" class="header">
+                {{ post.title }}
             </a>
-            <p class="description">{{ blog.slug }}</p>
+            <p class="description">{{ post.summary }}</p>
         </div>
     </div>
     {% endfor %}

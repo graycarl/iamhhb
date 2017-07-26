@@ -75,7 +75,7 @@ body {
 }
 
 /* Blog */
-#blogs {
+body.app-blog > .container {
     .ui.items.blog-list {
         .item {
             .image {
@@ -109,7 +109,7 @@ body {
 }
 
 /* Reading */
-#reading {
+body.app-reading > .container {
     .item.book-info > .image > img {
         height: 9em;
         width: auto;
@@ -122,7 +122,7 @@ body {
 }
 
 /* Wikis */
-#wikis {
+body.app-wiki > .container {
     .wiki-content {
         padding-top: 4em;
         max-width: 45em;
