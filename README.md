@@ -20,6 +20,7 @@
 - Internationalization and localization
 - RSS/Atom
 - Travis CI
+- Dumps data and save to s3 every a few days.
 
 
 ## Deploy Notes
@@ -39,11 +40,10 @@ $ heroku buildpacks -a iamhhb
 
 ```json
 {
-  ...
+  "somekey": "somevalue",
   "scripts": {
     "postinstall": "node_modules/bower/bin/bower install"
   },
-  ...
   "dependencies": {
     "bower": "^1.8.0"
   }
