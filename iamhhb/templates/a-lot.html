@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %} Powered by Lots {% endblock %}
+
+{% block content %}
+
+<pre>
+    {% for k, v in techs.items %}{{ k }}: {{ v|join:', ' }}
+    {% endfor %}
+</pre>
+
+{% endblock %}

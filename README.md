@@ -21,6 +21,7 @@
 - RSS/Atom
 - Travis CI
 - Dumps data and save to s3 every a few days.
+- Change to use Jinja2 as Template Engine
 
 
 ## Deploy Notes

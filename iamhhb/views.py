@@ -7,3 +7,14 @@ def index(request):
 
 def about_me(request):
     return render(request, 'about-me.html')
+
+
+def a_lot_tech(request):
+    techs = {
+        'Language': ['Python', 'HTML', 'JavaScript', 'Sass'],
+        'Framework': ['Django', 'Semantic UI'],
+        'Package Manager': ['PyPI', 'NPM', 'Bower'],
+        'Platform': ['GitHub', 'Heroku'],
+        'Database': ['PostgreSQL', 'SQLite']
+    }
+    return render(request, 'a-lot.html', locals())
