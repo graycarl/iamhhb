@@ -2,8 +2,30 @@
 
 {% block content %}
 
-<h1>{{ post.title }}</h1>
+<div class="blog-item clearfix">
 
-<pre>{{ post.content }}</pre>
-    
+    <div class="blog-content">
+        <h1>{{ post.title }}</h1>
+        <div class="meta">
+            <p class="summary">{{ post.summary }}</p>
+            <p class="time">Published @ {{ post.created_at|date:"M d, Y" }}</p>
+        </div>
+        {{ post.html_content|safe }}
+        <div class="ui horizontal divider"> END </div>
+    </div>
+
+    <div class="ui piled segment blog-toc">
+        <div class="content">
+            <h4 class="ui header">章节导航:</h4>
+            <span class="ui gray text">待实现</span>
+            <!-- <ul class="ui list">
+                <li> <a href="#7d5496"> 定义 </a> </li>
+                <li> <a href="#59bb97"> 各数据库的实现情况 </a> </li>
+                <li> <a href="#6deaa1"> 参考a </a> </li>
+            </ul> -->
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}

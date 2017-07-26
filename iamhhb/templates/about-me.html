@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %} I am HHB {% endblock %}
+
+{% block content %}
+
+<div class="ui card about-me">
+    <div class="image">
+        <img src="{% static 'me.jpg' %}" alt="Me avatar">
+    </div>
+    <div class="content">
+        <p class="header">何鸿波</p>
+        <p class="meta">男 • 1987 年 • 南京人</p>
+        <p class="description">草根码农，Pythoner，目前没啥建树。</p>
+    </div>
+    <div class="extra content">
+        <i class="location arrow icon"></i>
+        现居于北京
+    </div>
+</div>
+
+{% endblock %}
