@@ -4,25 +4,6 @@
 
 目的就是要打造一个没有任何妥协，完全合理的项目。
 
-## TODO
-
-- Adapt to Django
-  - Front End
-  - Fixtures
-  - Test
-  - Django-Pipeline
-- Disable user/group management in admin
-- Support reStructuredText
-- Support Post.status
-  - draft
-  - published
-  - hidden
-- Internationalization and localization
-- RSS/Atom
-- Travis CI
-- Dumps data and save to s3 every a few days.
-- Change to use Jinja2 as Template Engine
-
 
 ## Deploy Notes
 
@@ -53,6 +34,6 @@ $ heroku buildpacks -a iamhhb
 
 ### Migrate
 
-在 Procfile 里面添加了 Realse 命令来执行 Migration.
+在 Procfile 里面添加了 Release 命令来执行 Migration.
 
 see: https://devcenter.heroku.com/articles/release-phase#getting-started
