@@ -1,4 +1,9 @@
 from django.shortcuts import render
+from django.contrib import admin, auth
+
+# We don't need a user management
+admin.site.unregister(auth.models.User)
+admin.site.unregister(auth.models.Group)
 
 
 def index(request):
