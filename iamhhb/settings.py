@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'tl)&r5*9t8fy(ov_-9-1scj$p%6&giitcd7ua^=3!nh&n-4eyn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG') == 'true'
+DEBUG = True
 
 if not DEBUG and 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ['SECRET_KEY']
@@ -38,7 +37,6 @@ ALLOWED_HOSTS = [
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'pipeline',
@@ -97,8 +95,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'var', 'db.sqlite3'),
     }
 }
-# For heroku
-DATABASES['default'].update(dj_database_url.config(conn_max_age=50))
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
