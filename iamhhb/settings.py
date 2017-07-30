@@ -172,6 +172,7 @@ PIPELINE = {
         'site': {
             'source_filenames': (
                 'site.scss',
+                'blog/style.scss'
             ),
             'output_filename': 'site.css'
         }

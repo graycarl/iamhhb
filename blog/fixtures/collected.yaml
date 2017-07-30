@@ -1,0 +1,987 @@
+- fields:
+    content: '读完了《黑客与画家》，深深的被作者缜密而又清晰的思维所折服啊，实在是不服不行。
+
+
+      有人说，通常人们看完这本书后会有两种反应：一个是想要创业；一个是立刻开始学习Lisp。的确是这样。这也反应了这本书的两个很核心的思想。
+
+
+      总是觉得自己和书中描绘的那种优秀的“黑客”的性格思维还是比较匹配的，但是看看自己现在的水平，实在是差之（千里）²。不过仍然让我确信了自己的一些想法还是对的。
+
+
+      不管怎么说，我就应该成为一名真正的黑客，这就是我的方向。所以，抓紧时间往前跑吧。'
+    created_at: '2012-08-24 00:00:00+08:00'
+    slug: hackers-and-painters-reviews
+    summary: 读完一本书之后的碎碎念。
+    title: 黑客与画家读后感
+    updated_at: '2012-08-24 00:00:00+08:00'
+  model: blog.post
+  pk: 0
+- fields:
+    content: "发现这是一篇1999年的文章，12年了都，觉得时间过的好快，那时的我应该根本就没见过电脑吧。[原文地址](http://www.garshol.priv.no/download/text/http-tut.html)\n\
+      \n##介绍\n###关于本文\n\n本文的目的是就当前web技术的工作原理给出基本解释。很多社区论坛的文章中很明确的表明了我们应该懂这些知识，但是我没有在网络上找到一篇能够完整介绍相关技术的文章，所以我决定将这些相关文章的内容集合到本文中，完整的介绍Web技术的工作原理。希望这对你有用。\n\
+      \n本文涵盖了http协议（用于传输和接受网页）以及一些服务端程序和脚本的相关技术。本文假定你已经知道如何如构建一个网页，对html有较好的理解，并且对url有基本了解（url其实就是一个地址，你想要获取的文档的地址）。\n\
+      \n本文可能存在不完善的地方，欢迎反馈。如果你不是一名专业人员，发现对本文有任何不懂的地方，或者发现本文并没有回答你所有的疑问，欢迎联系我。同样欢迎对本文的修正和意见。\n\
+      \n###一些背景\n\n当你在上网时，情况通常是这样的：你坐在你的电脑前，想要查看网络上的一篇文章，并且你知道这篇文章的地址(url)。\n\n由于你想访问的这篇文章很可能是在离你非常遥远的地球的的某个角落的硬盘上，你需要一些条件才能来访问到它。首先是你的浏览器，你会打开你的浏览器，将url写入地址栏（或者其他方法告诉浏览器地址，比如点击一个超链接）。\n\
+      \n当然，这还不够，你的浏览器不可能直接从遥远角落的另一块磁盘上读出数据。为了你能够访问到这篇文章，存放这篇文章的计算机上必须运行一个网络服务器(web\
+      \ server)。Web server是一个专门用于监听并处理从浏览器发来的请求的计算机程序。\n\n接下来，浏览器连接server并请求这篇文章，server就会返回一个包含了这篇文章的回应（response），浏览器就可以很高兴的将文章显示给用户了。同时，server还会告诉浏览器传回来的数据到底是什么（可能是html页面，pdf文档，或者一个zip压缩包），浏览器会根据用户配置调用对应的处理程序将内容正确的显示出来。\n\
+      \n浏览器会直接将html内容显示出来，但是如果html中引用了一些其他内容（比如图片，java applet，声音片段），浏览器会继续向这些内容所在的服务器请求数据（这通常是同一个服务器，但也有可能不是）。这里的重点是，这里很可能会产生一系列独立的请求，并且会增加server和网络的负荷。当用户访问另一个地址时，这一过程就会重演。\n\
+      \n这些request和response是通过一种叫http的协议来分发和传输的，它是HyperText Transfer Protocol的缩写。本文主要就是在介绍该协议是如何工作的。还有一些协议如ftp和gopher的工作方式类似，但也有一些协议是按照一种完全不同的方式工作的。本文不对这些其他协议做任何介绍（文章的最后会给出一些对ftp协议的更详细的介绍的文章链接）。\n\
+      \n需要注意的是，http协议仅仅是定义了浏览器和服务器交流的内容是什么，而不是他们是如何通信的。对于这些比特数据的传输工作实际上是由tcp/ip协议去完成的。同样，ftp和Gopher（以及大部分的互联网协议）都是使用了tcp/ip来作为底层传输协议。\n\
+      \n在继续之前，你需要知道，任何行为和浏览器一样的程序都会在网络术语中被称作客户端（client），在互联网（web）术语中被称作用户代理（user agent）。通常我们说的服务器（server）很可能指的是服务器程序（server\
+      \ programe），而不是运行服务器程序的计算机（server machine）。\n\n##当我访问一个链接的时候发生了什么\n\n###第一步，解析url\n\
+      \n浏览器要做的第一件事就是从文档对应的url中找出获取该文档的方法。大多数的url都有如下的格式`protocol://server/request-URI`。其中，`protocol`部分描述了浏览器如何告诉服务器它需要的文档及如何检索该文档；`server`部分告诉浏览器它应该与哪个服务器通讯；`request-URI`用户服务器去定位该文档。（我之所以使用request-URI这个术语是由于它是被HTTP标准所使用的，并且我找不到其他足够典型且不会引起误解的术语）\n\
+      \n###第二步，发送request\n\n我们通常使用的是http协议。浏览器想要通过http协议来获取一个文档，它需要向服务器发送一个request，内容如下`GET/request-URI\
+      \ HTTP/version`。其中version告诉服务器应该使用哪个版本的http协议。（通常，这个request还会包含其他一些信息，细节在后面会讨论到）\n\
+      \n这些request字符串是server唯一能够得到的东西，所以server根本不关心这个request到底是来自于一个浏览器，还是link checker，还是validator，还是搜索引擎机器人，还是你手动输入的。它仅仅是执行这个请求并返回结果。\n\
+      \n###第三步，服务器回应\n\n当server收到这个http request后，它找到对应的文档并将其返回。一个http response会有如下的固定格式：\n\
+      \n    HTTP/[VER] [CODE] [TEXT]\n    Field1: Value1\n    Field2: Value2\n\n \
+      \   ...Document content here...\n\n第一行标识了正在使用的http的哪个版本，紧接着是状态码和对应简单解释。通常，状态码为200表示基本上一切正常。接下来的几行叫做header，描述了文档的一些信息。header以一个空行作为结束，再接下来就是文档内容了。它们看起来会像这样：\n\
+      \n    HTTP/1.0 200 OK\n    Server: Netscape-Communications/1.1\n    Date: Tuesday,\
+      \ 25-Nov-97 01:22:04 GMT\n    Last-modified: Thursday, 20-Nov-97 10:44:53 GMT\n\
+      \    Content-length: 6372\n    Content-type: text/html\n\n    <!DOCTYPE HTML\
+      \ PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n    <HTML>\n    ...followed by\
+      \ document content...\n\n我们从第一行得知本次请求是成功的。第二行是可选的，它告诉我们server运行的是Netscape Communications服务器，版本1.1。接下来是服务认为的当前时间及文档的最后修改时间。再接下来是文档的大小（单位bytes）及最重要的字段**Content-type**。\n\
+      \nContent-type字段告诉浏览器它接收到的文档是什么格式的，HTML会标记为`text/html`，纯文本会标记为`text/plain`，GIF图片会标记为`image/gif`等等。这样的好处是URL可以是任何形式的，同时浏览器总能知道正确的文档格式。\n\
+      \n这里有一个重要的概念，对于浏览器来说，server就是一个黑匣子。浏览器请求一个文档，然后它要么得到了该文档，要么得到一条错误消息。server处理请求的过程对浏览器是不可见的。也就是说，server可以从一个文件中读出该文档，可以运行一个程序产生该文档，可以从命令行工具编译出一个文档，甚至通过语音识别系统记录管理员的口述来形成一篇文档（这夸张了点，但原理上是可行的）。这就给了server管理员极大地自由去尝试各种方法，因为用户（浏览器）不关心文档是如何产生的。\n\
+      \n###server做了什么\n\n通常server会将磁盘上的某个目录配置成其根目录（root directory），并且每个目录都会有一个默认的文件名（通常是\"\
+      index.html\"）。当我们向server请求\"/\"这个文档的时候（比如\"http://www.domain.com/\"），就会被server定位到根目录下的index.html文件。如果我们请求\"\
+      /foo/bar.html\"就会被定位到根目录下的foo目录下的bar.html文件。\n\n但这不是一定的，server可以见\"/foo/\"映射到磁盘上的任意目录，甚至是使用服务端程序来处理所有该路径下的请求。server设置可以讲request映射成不按照路径的格式而是其他一些格式。\n\
+      \n###HTTP协议版本\n\n到目前为止，共有三个http版本（注：这是1999年的文章，所以...)。第一个是*HTTP/0.9*，这是一个极原始的版本，几乎没有规定任何标准。这些到*HTTP/1.0*被修正了，RFC1945文档规定了其标准。*HTTP/1.0*是当前最常用的版本，*HTTP/0.9*已经很少使用了。（还有一些简单的HTTP客户端使用0.9的版本，因为它们不需要最新的扩展功能）\n\
+      \nRFC2068文档规定了*HTTP/1.1*的标准，它在很多方面扩展并提升了*HTTP/1.0*。目前很少有浏览器能支持它（据作者所知，只有IE4.0支持），但是服务端已经开始进入该标准了。\n\
+      \n*HTTP/1.1*主要的更新在于对通过HTTP协议在线编写文档的支持，以及可以让客户端在一次请求完成后保持连接从而不需要再下次请求时重新建立连接。这可以在一定程度上减少延时和服务端负载。\n\
+      \n本文章主要描述*HTTP/1.0*，但会涉及一些*HTTP/1.1*的扩展，这些会详细标明。\n\n##客户端发出的请求\n\n###请求是什么样的\n\
+      \n基本上，所以的请求会看起来像这样：\n\n    [METH] [REQUEST-URI] HTTP/[VER]\n    [fieldname1]:\
+      \ [field-value1]\n    [fieldname2]: [field-value2]\n\n    [request body, if\
+      \ any]\n\nMETH描述了本次请求使用的method，method有很多种，每种都做各自不一样的事情。之前的例子使用了GET，下面还会介绍一些其他的。REQUEST-URI用于在server中定位文档，比如\"\
+      /index.html\"等等。VER是HTTP版本，和server response中的一样。header字段也和server response中的一样。\n\
+      \nReqeust body只有在需要向服务器传输数据的时候才会用到，比如POST和PUT（下面会介绍）。\n\n###获取一个文档\n\n有多种请求种类，最常用的是GET。一个GET请求就表示“发送给我一个文档”，其内容\"\
+      GET document\\_path HTTP/version\"。对于\"http://www.yahoo.com/\"文档路径是\"/\"，对于\"\
+      http://www.w3.org/Talks/General.html\"其文档路径是\"/Talks/General.html\"。\n\n虽然这第一行非常重要，但通常客户端不会单单只发送第一行，它还会包含一些需要让服务器知道的其他信息在header字段中。这些字段以\"\
+      fieldname: value\"的格式接在第一行之后，每个字段独占一行。\n\n一些常用的字段有如下这些：\n\n*   User-Agent\n\n\
+      \    这是用户代理（user agent）的字符标识。运行在Windows NT下的英文版Netscape 4.03浏览器会以\"Mozilla/4.03[en]\
+      \ (WinNT;I;Nav)\"来标识。\n\n*   Referer\n\n    Referer字段告诉server用户是从哪来的（上一个访问的url是什么）。这在处理登陆及检测谁链接到本页面时非常有用。\n\
+      \n*   If-Modified-Since\n\n    当浏览器的缓存中已经包含了这个文档的一个之前的版本，它就可以添加该字段，附上上次获得该文档的时间。server可以检查自从这个时间之后文档是否被修改过，如果没有，服务器只需要同时浏览器文档没有变化而不用重新发送整个文档。这样可以节省一些延时和网络负荷。\n\
+      \n*   Form\n\n    该字段让一些垃圾邮件制造者美梦成真了，因为它被设计成存放用户代理的使用者的email地址。浏览器很少用它，部分原因就是因为这些垃圾邮件制造者。但是，网络机器人应该使用它，这样Web管理员在能在网络机器人做出不合适的举动的时候能够联系到它的主人。\n\
+      \n*   Authorization\n\n    该字段存放一些认证信息，有些文档需要认证用户身份之后才能有访问权限。\n\n将这些信息放一起：下面是一个由我的浏览器（Opera）发出的典型的GET请求内容\n\
+      \n    GET / HTTP/1.0\n    User-Agent: Mozilla/3.0 (compatible; Opera/3.0; Windows\
+      \ 95/NT4)\n    Accept: */*\n    Host: birk105.studby.uio.no:81\n\n###HEAD: 检查文档\n\
+      \n有时候人们只想查看服务器返回的header信息，而不需要下载整个文档，这就是HEAD method的应用场景。HEAD的工作方式和GET十分相似，唯一的区别就是server只会返回header信息而不会返回文档内容。\n\
+      \n这在一些场景下十分有用，比如link checkers一类的软件，比如人们只想查看response headers信息（来确认server运行的是什么服务器等等）。\n\
+      \n###扮演浏览器\n\n你甚至可以通过直接编写request内容来扮演浏览器的行为。你只需要使用telnet链接服务器的80端口，并输入如下内容，最后再敲两次回车就可以：\n\
+      \n    larsga - tyrfing>telnet www.w3.org 80\n    Trying 18.23.0.23...\n    Connected\
+      \ to www.w3.org.\n    Escape character is '^]'.\n    HEAD / HTTP/1.0\n\n   \
+      \ HTTP/1.1 200 OK\n    Date: Tue, 17 Feb 1998 22:24:53 GMT\n    Server: Apache/1.2.5\n\
+      \    Last-Modified: Wed, 11 Feb 1998 18:22:22 GMT\n    ETag: \"2c3136-23c1-34e1ec5e\"\
+      \n    Content-Length: 9153\n    Accept-Ranges: bytes\n    Connection: close\n\
+      \    Content-Type: text/html; charset=ISO-8859-1\n\n    Connection closed by\
+      \ foreign host.\n    larsga - tyrfing>\n\n这会在Unix下很好的工作，Windows Telnet不能很好的工作（且很难配置好）。作为替代，你也可以使用HTTPTest，这是一个CGI脚本，我把它列在reference中了。\n\
+      \n##服务端的Response\n\n###概述\n\n服务端的返回内容由这些内容组成：一行状态码，接着是一些header字段，然后是一个空行，最后是文档内容。大概像这样：\n\
+      \n    HTTP/1.0 code text\n    Field1: Value1\n    Field2: Value2\n\n    ...Document\
+      \ content here...\n\n###状态码\n\n状态码由三个十进制数字组成，根据地一个数字的不同可以分为5组。下面给出的状态码对应的短语仅仅是建议内容，server可以返回任意的短语。\n\
+      \n*   **1xx: Infomational**\n\n    1xx的状态码没有被直接定义，它仅用于实验目的。\n\n*   **2xx: Successful**\n\
+      \n    表示该请求已经被成功的执行了。\n\n    *200 OK*  <br/>\n    表示服务完全按要求完成了它的任务，一切都正常。  <br/>\n\
+      \    *Others*  <br/>\n    其他的2xx状态一般表示脚本的执行，不常用。  <br/>\n\n*   **3xx: Redirection**\n\
+      \n    表示资源在其他地方，客户端需要重新尝试一个新的地址。\n\n    *301 Moved permanently*  <br/>\n   \
+      \ 客户端请求的资源已经前移到新的地址了，客户端需要冲新区该地址请求资源。所有对该资源的引用都需要更新。  <br/>\n    *302 Moved\
+      \ temporarily*  <br/>\n    这个301表示相同的意思，只是对该资源的链接和引用不需要更新，因为资源可能在未来的什么时候会迁移回来。\
+      \  <br/>\n    *304 Not modified*  <br/>\n    当客户端的request带有if-modified-since字段时，server可能会返回该状态码，表示在指定的时间内资源没有修改，所以客户端可以直接使用其缓存中的版本。\n\
+      \n*   4xx: Client error\n\n    这表示客户端出错了，通常指客户端请求了一个它不该请求的地址。\n\n    *400: Bad\
+      \ request*  <br/>\n    客户端发来的请求语法不对。  <br/>\n    *401: Unauthorized*  <br/>\n\
+      \    这表示客户端没有权限访问该资源，它需要客户端重新发送带有authorization的header字段的request才能访问。  <br/>\n\
+      \    *403: Forbidden*  <br/>\n    表示客户端没有权限访问该资源，即使带有authorization字段也不行。  <br/>\n\
+      \    *404: Not found*  <br/>\n    表示服务端根本不知道该资源是什么，也没有进一步的线索。  <br/>\n    换句话说就是**死链**。\n\
+      \n*   **5xx: Server error**\n\n    这表示服务端出错了，它不能完成客户端的请求。\n\n    *500: Internal\
+      \ server error*  <br/>\n    服务端内部出错。  <br/>\n    *501: Not implemented*  <br/>\n\
+      \    表示客户端请求的方法目前并不支持。  <br/>\n    *503: Service unavailable*  <br/>\n    这常用在服务端负载过高，无法及时处理这次请求。通常客户端等一段时间后重新尝试就可能成功。\n\
+      \n###Header字段\n\n下面是一些常用的response的header字段\n\n*   **Location**  <br/>\n    该字段给出了资源重定向后的新地址。\n\
+      *   **Server**  <br/>\n    该字段告诉浏览器当前使用的server。几乎所有的Web服务器都会返回该字段，但有时它们只是将其留空。\n\
+      *   **Content-length**  <br/>\n    该字段给出资源（文档内容）的大小，单位是bytes。\n*   **Content-encoding**\
+      \  <br/>\n    该字段说明了资源是以何种方式编码的，以便浏览器能够是用正确的方式对其解码。\n*   **Expires**  <br/>\n\
+      \    该字段高速浏览器本次请求的资源将在多长时间之后过期，以便浏览器可以在这段时间之内使用缓存的数据。\n*   **Last-modified**\
+      \  <br/>\n    该字段告诉浏览器该资源上次修改是在什么时候。可以用在镜像，及更新通知等场景。\n\n##缓存：在客户端和服务端之间的代理\n\
+      \n###浏览器缓存\n\n你可能会注意到，当你返回一个之前访问过的网页的时候，它的加载速度是很快的。这是因为浏览器已经保存了一个网页的副本在缓存中了。通常浏览器会设置一个缓存的最大值及保存网页的最长失效时间。\n\
+      \n也就是说，当你访问一个新的网页的时候，浏览器会把它保存在缓存中。当缓存满了之后，浏览器会选择最不常用的网页从缓存中删除来腾出空间，当该网页已经保存了8天而浏览器设置的最长失效时间是7天，那么该页面也是需要重新下载的。\n\
+      \n准确来说，每个浏览器处理缓存的方式是不同的，但是它们的基本思路大致相同，并且都是为了减少演示并节约带宽。其实她还与一些HTTP协议细节相关，这会在稍后谈到。\n\
+      \n###Proxy缓存\n\n浏览器缓存是一个很好的方法，但是当很多用户都访问同一个地址，当它们的缓存失效后都需要一遍遍的访问服务器来刷新它们的缓存。显然，这不是最理想的。\n\
+      \n解决方案就是让多个用户能够共享缓存，Proxy缓存就是这么来的。当用户浏览器需要访问一个新的网页的时候，它不是将请求直接发送给服务器，而是将请求发送给Proxy，如果Proxy的缓存中有对应的文档就会将该文档返回给浏览器，如果Proxy缓存中没有指定的文档，它会去向服务器发送请求来获取该文档，并将其保存在自己的缓存中，最后将文档返回给浏览器。\n\
+      \n所以Proxy就是一个被多用户共享的缓存，能够大幅度减小网络负荷。当然，他也会影响基于日志的统计数据。\n\n一种比单独的Proxy缓存更高级的方案是使用层级的缓存。想象一个大型的ISP会为每个国家分配一个区域Proxy缓存，然后每个区域Proxy缓存会向同一个全局Proxy缓存中请求数据。这样能够更大程度的减小网络负荷。更多的相关细节可以参考后面的Reference。\n\
+      \n##服务器端编程\n\n###是什么和为什么\n\n服务器端脚本（或者叫程序）就是一些运行在服务器上的简单程序，用于回应客户端发来的请求。它们产生正常的HTML文档并将其返回给客户端，就好像客户端请求的就是一个普通的文档一样。实际上，客户端永远都不会知道它们得到的文档是不是程序产生的。\n\
+      \n而像JavaScript,VBScript,Java applet等技术都是运行在客户端的，所以它们不是服务端脚本。客户端脚本和服务端脚本主要缺别的原因是由于通常客户端和服务端并不是同一台机器。所以需要处理大量服务端数据的任务通常都会使用服务端脚本而不是客户端脚本。当需要实现更多的人机交互功能的时候，客户端脚本就是更好的选择了，因为这样可以减少客户端向服务端的请求。\n\
+      \n所以，总的来说，需要处理大量服务端数据且不需要频繁的人机交互功能的时候，通常是使用服务端脚本。相反，需要处理少量数据但是大量人机交互功能的时候，通常是使用客户端脚本。\n\
+      \n使用服务端脚本的一个典型例子就是搜索引擎Altavista（看来那时候Google还没出来啊），使用客户端脚本将Altavista公司搜集的所有文档资料下载下来显然是不可行的。使用客户端脚本的一个典型例子就是一个简单的棋牌游戏，这不需要什么数据处理，如果将用户的每一部动作都返回给服务端也太麻烦了。\n\
+      \n不过这里遗留了一个问题，如果一项任何同时需要数据处理和人机交互该怎么办呢？目前没有很好地解决方案，不过一想叫做XML的新技术可能可以解决这个问题。（可以在reference中找到更多详细信息）\n\
+      \n###它是如何工作的\n\n服务端脚本的工作方式根据使用的大量不同的技术而不同，但是，有些东西是不变的。Web服务器接收到普通的request，但是这个URL不是映射到一个具体文件上，而是映射到一个脚本区域。\n\
+      \nWeb服务器会执行这个脚本，并将request的所有信息传递给它，脚本最后会返回HTTP headers和HTML内容，服务器将这些传递给客户端。\n\
+      ###CGI\n\nCGI（全称是Common Gateway Interface）规定了一种Server与服务端脚本交互的方式。CGI是完全独立于编程语言、操作系统及服务器之外的。它是当前最流行的服务端脚本技术，现有的大部分server都能够支持它。并且，各种server几乎都以相同的方式来实现它。所以，你可以写一个CGI脚本，然后把它部署到各种server上都能正常运行。\n\
+      \n就像我上面提到的，server需要一种机制来判断一个url是否是映射到了一个服务端脚本上还是映射到了一个html文件上。在CGI规定中，我们可以通过创建CGI目录来解决这个问题。在server的配置中，我们指定一个目录为CGI目录，这就表示该目录下都为CGI脚本，对该目录文件的请求都是通过执行对应脚本来获得回应（这个目录通常是*/cgi-bin/*，所以类似于*http://www.domain.com/cgi-bin/search*这个url就会被映射到一个CGI脚本上，注意其实该目录可以是任何名称）。我们也可以不使用CGI目录，但是需要保证所以的CGI程序文件都以.cgi结尾。\n\
+      \nCGI脚本只是普通的可执行程序（或者是一些解释性语言的源文件，如Python/Perl，或者是任何操作系统知道怎么去执行的文件），所以你可以使用任意的编程语言。Server在执行cgi程序之前会将收到的request中的一些信息设置到环境变量，比如客户端ip、以及一些header字段等。并且，如果url中包含\"\
+      ?\"这个字符，该字符后面的内容会被设置到环境变量中。\n\n这就表示我们可以在url中存放一些额外的信息。例如，当多个用户都要访问一个计数器url，而我们又想知道每次都是谁访问了的时候，我们就可以让各个用户都去访问类似于*http://stats.vendor.com/cgi-bin/counter.pl?username*这样的url（要将username替换成用户姓名）。这样该脚本执行的时候就可以知道到底是谁访问了它。\n\
+      \nCGI程序返回它的输出给server的方式十分简单，只需要将输出写入标准输出就可以了。也就是说，如果使用python/perl，我们只需要使用print语句，如果使用c/c++，我们可以用printf或者一些类似的，如果使用java，那就用System.out.println。\n\
+      \n更多关于CGI的详细信息可以在reference中找到。\n\n###其他技术\n\n服务端编程并不是只有CGI这一种方式，况且CGI的方式被认为是效率比较低的，一个很重要的原因是每次处理一个请求的时候都需要将CGI程序全部载入内存并且重头执行脚本。\n\
+      \n一种效率更高的编程方式是直接使用server的api。也就是说，程序会变成server进程的一部分，并且使用server提供的api。这种方式的一个缺点就是，这样的程序显然就是依赖于不同的server的，并且，如果使用c/c++编程的话，可能程序的错误会直接导致整个server的崩溃。\n\
+      \n使用server的api编程的最大好处是运行效率会比较高，应该当一个request到达server的时候，处理它所需要的程序及数据已经载入到内存中了。\n\
+      \n一些server支持使用crash-proof型的编程语言，比如AOLserver可以使用tcl来编程。或者一些server例如Apache可以通过模块插件的形式来支持例如python/perl的语言。这样就可以很大程序上的减少因为程序的错误导致的整个server崩溃的可能性。\n\
+      \n还有很多server支持其他各种各样专属的或者通用的编程语言，其中，最有名的例如ASP、MetaHTML以及PHP3等。\n\n###表单提交\n\n\
+      客户端与服务端交流的最常用的方式是使用HTML表单。用户在表单中填写数据，然后点击表单的提交按钮，表单数据就会提交到server。如果表单的作者规定了使用GET方式提交数据，表单数据就会被编码进url中，使用上面提到的\"\
+      ?\"语法。这种编码方式很简单，例如，如果表单中的name框和email框被填入*Joe*和*joe@hotmail.com*，那么被编码后的url就会是这样*http://www.domain.com/cgi-bin/script?name=joe&email=joe@hotmail.com*。\n\
+      \n如果要提交的数据中包含了url中不能使用的字符，那么这些字符就会先进行一步转换然后再加入url中。例如\"~\"字符就会变成\"%7E\"，更多细节在RFC1738中会详细说明。\n\
+      \n###POST：发送数据给服务器\n\nGET不是向浏览器提交数据的唯一方式，还可以使用POST。在这种情况下，request就会包含header和body（就像server返回的response一样），body中就存放要提交的表单数据。\n\
+      \n通常来说，POST使用在当request会改变server的状态（例如提交一条记录），GET用在不会改变server状态的场景（例如执行一次查询）。\n\
+      \n当我们需要提交的数据较长时（大于256字符），使用GET方式就比较危险，因为GET方式会使用环境变量来传递，而一些操作系统会限制环境变量的大小为256字符，所以可能GET方式提交的长数据会变切断。这种情况可以使用POST方式提交数据来避免。\n\
+      \n一些POST请求的处理脚本会在完成后通过302状态码将浏览器重定向到一个确认页面，就是为了防止浏览器多次向之前的页面提交POST数据。\n\n##更多细节\n\
+      \n###内容协商\n\n考虑这样的场景，你刚刚听说PNG这种新的图片格式，然后打算将网站当前使用的所以GIF的图片都替换成这种格式。但是问题是，GIF图片是当前所有浏览器都支持的，但是PNG图片格式只有最流行的一些浏览器才能支持。所以如果你替换了你的图片格式，那么可能只有一部分用户能够看到你的图片了。\n\
+      \n为了防止这种情况，浏览器在html发现需要请求新的图片时，它会在图片request中添加accept字段，大部分浏览器都会这么做。\n\n通常accept字段的内容是这样的*\"\
+      image/\\*,image image/png\"*，意思是，我希望得到PNG格式的图片，如果你不能给我，那就给我其他格式的吧。\n\n这是在标准中描述的功能，但是我们生活在一个并不是那么标准的世界中，大部分浏览器会直接在accept字段中写入*\"\
+      \\*/\\*\"*，这就相当于啥也没说。这种情况可能会在未来改变，但目前为止，这个特性没有一点作用。\n\n###Cookies\n\nHTTP协议有一个很不方便的地方，每个request都是完全独立且无状态的。这对服务端程序来说，如果单纯的使用HTTP协议，我们就根本无法得知用户在发来这个request请求之前都做过些什么。（其实也有一些技巧可以使用，但是它们既丑陋又很低效）\n\
+      \n举例来说，想象这样一种场景，server通过http协议向用户提供抽奖功能，我们当然不希望用户能够不断的刷新页面直到中奖。我们虽然可以通过限制同一个ip的用户的请求间隔时间来达到目的，但是这样不够精确，我们无法判断他们到底是不是同一个用户。\n\
+      \n如果用户通过调制解调器连接Internet，他们会被分配一个唯一的ip地址，但是当一个用户下线后，这个同样的ip可能被分配给另一个刚刚上线的用户。还有一种情况，当多个用户都在使用终端登录一个大型的Unix系统的使用，这些用户都会使用同一个ip地址。\n\
+      \n网景公司的解决办法是使用一种叫做**cookies**的魔法字符串（规格说明书上说cookie这个名称没有任何含义，其实这个名称还是有一段很长的历史的）。server返回一个\"\
+      set-cookies\"的header字段，存放了cookie名称、失效时间、以及一些其他信息。当浏览器访问同一个url（或者其他url，由server指定）的时候，它会在request中包含该cookie信息（如果没有失效的话）。\n\
+      \n这样的话，我们就可以在用户访问上面说的抽奖url时设置一个cookie，这样，下载访问的时候server就可以知道该用户是不是已经访问过该地址了，然后继续处理该request或者通知用户过段时间之后再尝试。当前，前提是浏览器没有禁用cookies。\n\
+      \nCookies可以用来检测用户访问该Web站点的足迹，或者对每个用户提供用户自定义的专属页面。这是很有用的，但是可能会牵涉到一些隐私问题。\n\n\
+      ###服务器日志\n\n大部分server都会在它们正常工作的时候创建日志，也就是说，它们没处理一个request的时候都会在日志中添加一条记录。下面是摘录的一部分日志内容\n\
+      \n    rip.axis.se - - [04/Jan/1998:21:24:46 +0100] \"HEAD /ftp/pub/software/\
+      \ HTTP/1.0\" 200 6312 - \"Mozilla/4.04 [en] (WinNT; I)\"\n    tide14.microsoft.com\
+      \ - - [04/Jan/1998:21:30:32 +0100] \"GET /robots.txt HTTP/1.0\" 304 158 - \"\
+      Mozilla/4.0 (compatible; MSIE 4.0; MSIECrawler; Windows 95)\"\n    microsnot.HIP.Berkeley.EDU\
+      \ - - [04/Jan/1998:22:28:21 +0100] \"GET /cgi-bin/wwwbrowser.pl HTTP/1.0\" 200\
+      \ 1445 \"http://www.ifi.uio.no/~larsga/download/stats/\" \"Mozilla/4.03 [en]\
+      \ (Win95; U)\"\n    isdn69.ppp.uib.no - - [05/Jan/1998:00:13:53 +0100] \"GET\
+      \ /download/RFCsearch.html HTTP/1.0\" 200 2399 \"http://www.kvarteret.uib.no/~pas/\"\
+      \ \"Mozilla/4.04 [en] (Win95; I)\"\n    isdn69.ppp.uib.no - - [05/Jan/1998:00:13:53\
+      \ +0100] \"GET /standard.css HTTP/1.0\" 200 1064 - \"Mozilla/4.04 [en] (Win95;\
+      \ I)\"\n\n该日志使用的是扩展的通用日志格式，大部分的server都支持这种格式。第一行显示该request是从Netscape 4.04浏览器发来的，第二行的request是由使用了MSIE的机器人发来的，接下来三行又是Netscape\
+      \ 4.04浏览器。\n\n这些日志对于调试服务端程序及配置server时是非常有用的。我们也可以通过日志分析器来分析这些日志而得出一些报告（由于cache的存在，这些保存不一定准确）。\n\
+      \n###一个HTTP客户端的简单例子\n\n为了举例，下面给出一个使用Python写的一个简单的http客户端的例子。它接受hostname和path作为参数，产生一个request请求并将收到的返回值打印出来。（我们可以使用python的url库使代码变得更少，不过这样的话，例子就没用了）\n\
+      \n    :::python\n    # Simple Python function that issues an HTTP request\n\n\
+      \    from socket import *\n\n    def http_req(server, path):\n\n        # Creating\
+      \ a socket to connect and read from\n        s=socket(AF_INET,SOCK_STREAM)\n\
+      \n        # Finding server address (assuming port 80)\n        adr=(gethostbyname(server),80)\n\
+      \n        # Connecting to server\n        s.connect(adr)\n\n        # Sending\
+      \ request\n        s.send(\"GET \"+path+\" HTTP/1.0\\n\\n\")\n\n        # Printing\
+      \ response\n        resp=s.recv(1024)\n        while resp!=\"\":\n         \
+      \   print resp\n            resp=s.recv(1024)\n\n我们这样执行\n\n    :::python\n \
+      \   http_req(\"birk105.studby.uio.no\",\"/\")\n\n服务端产生这样的日志\n\n    birk105.studby.uio.no\
+      \ - - [26/Jan/1998:12:01:51 +0100] \"GET / HTTP/1.0\" 200 2272 - -\n\n注意日志最后的\"\
+      - -\"，这是因为我们发出的request中没有包含相关的信息。\n\n###身份验证\n\n我们可以将Server配置成只有通过了身份验证的用户才能访问某个url，通常在配置Server的时候就设定好username/password，当然也还有其他方法。\n\
+      \n当用户访问该url的时候，server返回\"401 Not authorized\"状态码。然后浏览器通常会弹出一个窗口让用户填写用户名密码，完成后浏览器会将这些信息放入Authorization字段中并重新尝试请求该url。\n\
+      \n如果server验证通过了，就会像普通request一样去处理，如果没有通过，它会再次返回401状态码。\n\n###服务端HTML扩展\n\n一些server，例如Roxen、MetaHTML允许用户在他们的HTML文件中嵌入一些非HTML的命令。这些命令会在server处理request的时候执行并最终产生普通的html，然后再发送给客户端。这可以用于裁减一些Html内容或者访问数据库插入一些内容。\n\
+      \n这种语言的两个关键点，一个是与具体的server绑定，一个是会产生正常的header字段和html内容作为输出。\n\n这样的好处是对客户端是透明的，任何浏览器都可以使用。\n\
+      \n###写作与维护（HTTP扩展）\n\nHTTP/1.0只定义了GET、HEAD、POST方法，对于普通的浏览来说，这些方法已经足够了。但是我们可能希望能够使用http协议去修改和维护server文件及目录，这样可以免去使用ftp连接服务器。这样HTTP/1.1就是为了这种需要新增了一些方法。\n\
+      \n*   **PUT**\n\n    PUT上传一个新的资源（文件）到server的当前url路径下。HTTP/1.1没有规定server应该具体做什么，但是像Netscape\
+      \ composer这样的写作程序使用PUT将文件上传并保存到server上。PUT请求不应该被缓存。\n\n*   **DELETE**\n\n  \
+      \  不用说也应该能知道，DELETE方法请求server删除该url指定的文件。在Unix系统上，这个方法可能会失败，因为文件系统可能不允许server删除文件。\n\
+      \n###META HTTP-EQUIV\n\n如果你希望对web服务器上的某些页面设置特定的header字段，例如Expires等，可能在一些server上这是一件很麻烦的事情。有一种方法可以解决这个问题，在http中可以插入META元素来帮助设置HTTP的header字段。它希望server去解析这个元素并把对应的header字段插入到response中，但是实际上很少有server实现了这个功能。不过，作为替代，一些浏览器实现了该特性。不是所有的浏览器都支持它，不过这依然能够提供一些帮助。\n\
+      \n基本用法就是将下面一行插入html的head标签内\n\n    <META HTTP-EQUIV=\"header field name\" CONTENT=\"\
+      field value\">\n\n###主机header字段\n\n一些Web服务商可能会使用同一台物理机器来提供多个不同的Web服务。比如，*http://www.foo.com/*、*http://www.bar.com/*和*http://www.baz.com/*可能都是同一台物理机器来提供服务，但是用户却能够通过这三个url会得到三种不同的服务。为了实现这个，需要http协议的一个扩展功能来告诉server用户需要访问的什么服务。\n\
+      \n解决方案是\"HOST\"字段。当用户访问*http://www.bar.com*的时候，会将\"www.bar.com\"插入到HOST字段中，这样server就能够知道用户希望访问什么服务。它也常被用来为每个虚拟服务产生独立的日志。\n\
+      \n##一些常见问题的答案\n\n略......\n\n##Appendices\n\n###Explanations of some technical\
+      \ terms\n\n*   API\n\n    An Application Programming Interface is an interface\
+      \ exposed by a program, part of an operating system or programming language\
+      \ to other programs, so that the programs that use the API can exploit the features\
+      \ of the program that exposes the API. One example of this would be the AWT\
+      \ windowing library of Java that exposes an API that can be used to write programs\
+      \ with graphical user interfaces. APIs are only used by programs, they are not\
+      \ user interfaces.\n\n*   TCP/IP\n\n    The IP protocol (IP is short for Internet\
+      \ Protocol) is the backbone of the internet, the foundation on which all else\
+      \ is built. To be a part of the internet a computer must support IP, which is\
+      \ what is used for all data transfer on the internet. TCP is another protocl\
+      \ (Transport Control Protocol) that extends IP with features useful for most\
+      \ higher-level protocols such as HTTP. (Lots of other protocols also use TCP:\
+      \ FTP, Gopher, SMTP, POP, IMAP, NNTP etc.) Some protocols use UDP instead of\
+      \ TCP.\n\n###Acknowledgements\n\nIn closing I'd like to thank the following\
+      \ people who have helped me with this tutorial:\n\n*   Jelks Cabaniss, who provided\
+      \ early feedback on form and contents as well as encouragement.\n*   Alan J.\
+      \ Flavell, for detailed and highly useful criticism.\n*   Jukka Korpela, for\
+      \ help with the markup in this document and extensive criticism on form and\
+      \ content, as well as a couple of useful links.\n*   Christian Nybø, for suggesting\
+      \ that I mention telnetting to servers and making HTTPTest a little more prominent.\n\
+      *   Harald Joerg, who found a number of typos, and suggested some improvements\
+      \ in the organization.\n*   Bjørn Borud, for some hints on organization as well\
+      \ as a typo fix.\n*   Ingrid Melve for some useful links.\n*   Darren Moore\
+      \ for suggesting that I define some technical terms.\n*   Felipe Wersen for\
+      \ pointing out a typo.\n\n###References\n\nImportant specifications and official\
+      \ pages\n\n*   [The W3C pages on HTTP.](http://www.w3.org/Protocols/)\n*   [RFC\
+      \ 1945](http://www.cis.ohio-state.edu/htbin/rfc/rfc1945.html), the specification\
+      \ of HTTP 1.0.\n*   [RFC 2068](http://www.cis.ohio-state.edu/htbin/rfc/rfc2068.html),\
+      \ the specification of HTTP 1.1.\n*   [RFC 1738](http://www.cis.ohio-state.edu/htbin/rfc/rfc1738.html),\
+      \ which describes URLs.\n*   [The magic cookie specification](http://home.netscape.com/newsref/std/cookie_spec.html),\
+      \ from Netscape.\n\nProxy caches\n\n\n*   [Web caching architecture](http://www.uninett.no/prosjekt/desire/arneberg/),\
+      \ a guide for system administrators who want to set up proxy caches.\n*   [A\
+      \ Distributed Testbed for National Information Provisioning](http://www.nlanr.net/Cache/),\
+      \ a project to set up a national US-wide cache system.\n\nVarious\n\n\n*   [The\
+      \ Mozilla Museum](http://www.snafu.de/~tilman/mozilla/index.html)\n*   [The\
+      \ registered MIME types](ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types),\
+      \ from IANA.\n*   [HTTPTest](http://www.garshol.priv.no/download/HTTPTest.html).\
+      \ Try sending HTTP requests to various servers and see the responses.\n*   [An\
+      \ overview of most web servers available.](http://webcompare.internet.com/)\n\
+      *   [The POST redirect problem.](http://www.crl.com/%7Esubir/lynx/why.html#post-redirect)\n\
+      *   [About the use of the word 'cookie' in computing.](http://www.wins.uva.nl/~mes/jargon/c/cookie.html)\n\
+      *   [More information about XML.](http://www.garshol.priv.no/linker/WWWlinks.html#XML)\n\
+      *   [About FTP URLs.](http://www.hut.fi/u/jkorpela/ftpurl.html)\n*   [A short\
+      \ Norwegian intro to HTTP.](http://www.uninett.no/UNINyTT/2-96.http.html)"
+    created_at: '2012-09-01 00:00:00+08:00'
+    slug: how-the-web-works
+    summary: 一篇 1999 年的文章，觉得对于我这种初学者来说讲的非常好，就翻译了一下。
+    title: 翻译：How the web works
+    updated_at: '2012-09-01 00:00:00+08:00'
+  model: blog.post
+  pk: 1
+- fields:
+    content: "之前一直以为 windows 下的 gvim 是不支持 python 的智能提示 (`Ctrl-x Ctrl-o`) 的，因为每次执行都会被提示需要在编译时加上\
+      \ `+python`。今天又上网搜了下该问题，发现貌似并不是这个问题。\n\n在gvim中执行 `:version` 输出如下\n\n    VIM\
+      \ - Vi IMproved 7.3 (2010 Aug 15, compiled Oct 27 2010 17:59:02)\n    MS-Windows\
+      \ 32 位图形界面版本 带 OLE 支持\n    包含补丁: 1-46\n    编译者 Bram@KIBAALE\n    大型版本 带图形界面。\
+      \  可使用(+)与不可使用(-)的功能:\n    +arabic +autocmd +balloon_eval +browse ++builtin_terms\
+      \ +byte_offset +cindent\n    +clientserver +clipboard +cmdline_compl +cmdline_hist\
+      \ +cmdline_info +comments\n    +conceal +cryptv +cscope +cursorbind +cursorshape\
+      \ +dialog_con_gui +diff\n    +digraphs -dnd -ebcdic +emacs_tags +eval +ex_extra\
+      \ +extra_search +farsi\n    +file_in_path +find_in_path +float +folding -footer\
+      \ +gettext/dyn -hangul_input\n    +iconv/dyn +insert_expand +jumplist +keymap\
+      \ +langmap +libcall +linebreak\n    +lispindent +listcmds +localmap -lua +menu\
+      \ +mksession +modify_fname +mouse\n    +mouseshape +multi_byte_ime/dyn +multi_lang\
+      \ -mzscheme +netbeans_intg +ole\n    -osfiletype +path_extra +perl/dyn +persistent_undo\
+      \ -postscript +printer\n    -profile +python/dyn +python3/dyn +quickfix +reltime\
+      \ +rightleft +ruby/dyn\n    +scrollbind +signs +smartindent -sniff +startuptime\
+      \ +statusline -sun_workshop\n    +syntax +tag_binary +tag_old_static -tag_any_white\
+      \ +tcl/dyn -tgetent\n    -termresponse +textobjects +title +toolbar +user_commands\
+      \ +vertsplit\n    +virtualedit +visual +visualextra +viminfo +vreplace +wildignore\
+      \ +wildmenu\n    +windows +writebackup -xfontset -xim -xterm_save +xpm_w32\n\
+      \    ......\n\n里面有 `+python/dyn +python3/dyn`，说明其本身是支持 python 的。但是在 gvim 中执行\
+      \ `:echo has(\"python\")` 的时候返回为零，并且 `:py <code>` 也没法执行。\n\n在网上搜索的时候发现有人提到了\
+      \ gvim 和 python 的安装顺序。我看了下，发现我是先安装了 gvim-windows 再安装了 python3-windows 的，觉得有可能是这个问题。于是把\
+      \ gvim 卸了重新安装，再执行 `:echo has(\"python\")` 还是返回零。\n\n又想到是不是由于我安装的是python3？于是就试了下\
+      \ `:echo has(\"python3\")`，果然这次返回了1，`:py3 <code>`也是正常的。所以这里我也不确定是不是和安装顺序有关，因为之前从来没有试过\
+      \ `:py3`。\n\n重新打开一个 python 代码，用 `Ctrl-x Ctrl-o` 发现还是不行，一样的提示\n\n    Error: Required\
+      \ vim compiled with +python\n    E117: Unknown function: pythoncomplete#Complete\n\
+      \n不过有了以上的经历我猜到应该是 vim 还是去找 python2 了，问题可能是 `pythoncomplete#Complete` 这里。在 gvim\
+      \ 安装目录里面搜了一下 `python`，发现有 `pythoncomplete.vim` 这个包和 `python3complete.vim` 这个包。所以应该是文件类型处理里面指定了使用\
+      \ `pythoncomplete` 而不是 `python3complete`。\n\n打开 gvim 目录里面的 ftplugin/python.vim，果然找到了\n\
+      \n    setlocal omnifunc=pythoncomplete#Complete\n\n改成\n\n    setlocal omnifunc=python3complete#Complete\n\
+      \n这样就可以正常使用了。"
+    created_at: '2012-09-17 00:00:00+08:00'
+    slug: gvim-python3-omnicomplete
+    summary: 解决 windows 下 gvim 无法使用 python3 的智能提示的问题。
+    title: Windows 下 gVim 使用 python3 的智能提示
+    updated_at: '2012-09-17 00:00:00+08:00'
+  model: blog.post
+  pk: 2
+- fields:
+    content: "## 起因\n\n之前已经用 `flask` 实现了 `restful` 的接口，接口主要是提供给移动平台的 App 使用的。\n\n\
+      之前看过 WunderList 的 Web 的上收发请求使用了一种**批量**的请求来一次性处理多个请求的使用方法，又加上移动平台 Ap 的网络和性能的问题，觉得我也应该做这么一个**批量**接口，基本定义如下：\n\
+      \n\tmethod: post\n\turi: /app/batch\n\tdata:[json]\n\t    {\n\t        \"on-fail\"\
+      : \"ignore|stop\",\n\t        \"requests\": [\n\t            {\n\t         \
+      \       \"method\": \"get\",\n\t                \"uri\": \"/user/~me\",\n\t\
+      \                \"args\": {\n\t                    \"arg1\": \"value1\",\n\t\
+      \                    \"arg2\": \"value2\"\n\t                }\n\t         \
+      \   },\n\t            {\n\t                \"method\": \"put\",\n\t        \
+      \        \"uri\": \"/user/~me/oauth/QZONE\",\n\t                \"args\": {\n\
+      \t                    \"arg1\": \"value1\",\n\t                    \"arg2\"\
+      : \"value2\",\n\t                }\n\t            },\n\t            ....\n\t\
+      \        ]\n\t    }\n\t\n\treturn:[json]\n\t    {\n\t        \"responses\":\
+      \ [\n\t            {\n\t                \"method\": \"get\",\n\t           \
+      \     \"uri\": \"/user/~me\",\n\t                \"status_code\": \"200\",\n\
+      \t                \"body\": { ... }\n\t            },\n\t            {\n\t \
+      \               \"method\": \"put\",\n\t                \"uri\": \"/user/~me/oauth/QZONE\"\
+      ,\n\t                \"status_code\": \"200\",\n\t                \"body\":\
+      \ { ... }\n\t            },\n\t            ....\n\t        ]\n\t    }\n\n所以我需要在\
+      \ batch 请求的处理过程中创建一系列的子请求并处理他们收集结果，但是不知道有没有一种比较好的实现方式。\n\n\n## 实现\n\n在 StackOverFlow\
+      \ 和 Python-China 上问了一圈没人回答之后，我觉得还是得靠自己。于是我把 `Flask` 里面的 `ApplicationContext`\
+      \  `ReqeustContext`  `werkzeug.test` 等模块的相关实现都看了一遍，觉得可以这么做。\n\n```python\nfrom\
+      \ flask import request, current_app\nfrom werkzeug.test import EnvironBuilder\n\
+      \ndef handle_request(uri, method, data, **kwargs):\n    method = method.upper()\n\
+      \    args = {\n        \"path\": uri,\n        \"method\": method,\n       \
+      \ \"headers\": {\n            \"Authorization\": request.headers[\"Authorization\"\
+      ],\n        }\n    }\n    if method in (\"POST\", \"PUT\", \"PATCH\"):\n   \
+      \     args[\"data\"] = data\n    else:\n        args[\"query_string\"] = data\n\
+      \    builder = EnvironBuilder(**args)\n    environ = builder.get_environ()\n\
+      \    with current_app.request_context(environ):\n        try:\n            resp\
+      \ = current_app.full_dispatch_request()\n        except Exception as e:\n  \
+      \          resp = current_app.make_response(\n                current_app.handle_exception(e)\n\
+      \            )\n    return resp\n```\n\n这样在 batch 请求的处理函数里面调用该函数即可获取子请求的处理结果。\n\
+      \n这样唯一觉得不爽的是使用了 `werkzeug.test` 模块，这个模块本来就应该是给测试环境使用的，我这么搞算不算滥用呢？"
+    created_at: '2013-09-13 00:00:00+08:00'
+    slug: flask-sub-request
+    summary: 如何在 flask 中实现一个可以一次处理多个请求的 restful 接口？
+    title: Flask 中创建并处理一个子请求
+    updated_at: '2013-09-13 00:00:00+08:00'
+  model: blog.post
+  pk: 3
+- fields:
+    content: "最近在给考拉山后台添砖加瓦的过程中，发现了两个问题：\n\n* 对于当前的同一套逻辑，我已经有4个view层工作在上面了，马上还要再加上一个view，专门用来显示分享出去的页面；\n\
+      * 接下来还要再加上同步evernote这种异步任务；\n* 而现在这些代码都还在同一个GIT仓库中；\n\n这种混乱的场景已经快让我不能忍了，于是乎决定把这个大仓库中的所有`business`和`model`的代码独立到一个`submodule`中，这样接下来就可以进一步的拆分各个view让它们都引用这个`submodule`。\n\
+      \n还好之前的代码结构还算比较好，所有`business`和`model`的代码都在一个名为`coloshine`的目录中，所以接下来只要解决如何把一个子目录独立成一个`submodule`并且保存分支和提交历史这个问题就好了。\n\
+      \n对GIT还没精通到这个程度，只能上网Google，现贴出方案；\n\n## 准备\n\n当前的目录结构如下：\n\n    coloshine-server\n\
+      \    ├── ....\n    ├── coloshine  -> 想要变成子模块的目录\n    ├── coloshine_account\n\
+      \    ├── coloshine_admin\n    ├── coloshine_api\n    ├── coloshine_pics\n  \
+      \  ├── ...\n\nClone一个新的仓库到目录`coloshine`\n\n    :::bash\n    git clone coloshine-server\
+      \ coloshine\n\n这时`coloshine`仓库的目录结构应该是和`coloshine-server`完全一样的。\n\n\n## 选择要保存的分支\n\
+      \n通常刚clone出来的`coloshine`仓库本地只会有一个分支（比如master），如果我们希望在马上要做的子模块中保存其他的分支，那就首先把它们创建出来：\n\
+      \n    :::bash\n    git branch -r br1 origin/br1\n    git branch -r br2 origin/br2\n\
+      \    \n最后`origin`这个remote是不需要的，把它删除了\n    \n    :::bash\n    git remote rm origin\n\
+      \    \n## 转化成子模块\n\n这一步是最重要的步骤，命令如下：\n\n    :::bash\n    git filter-branch --tag-name-filter\
+      \ cat --prune-empty --subdirectory-filter coloshine -- --all\n\n该命令过滤所有历史提交，保留对coloshine子目录有影响的提交，并且把子目录设为该仓库的根目录。下面解释下各参数意思：\n\
+      \n* --tag-name-filter cat 该参数控制我们要如何保存旧的tag，参数值为bash命令，cat表示原样输出。所以，如果你不关心tag，就不需要这个参数了；\n\
+      * --prune-empty 删除空的（对子目录没有影响的）的提交\n* --subdirectory-filter coloshine 指定子模块路径\n\
+      * -- --all 该参数必须跟在`--`后面，表示对所有分支做操作，即对上一步创建的所有本地分支做操作。所以，如果你只想保存当前分支，就不需要这个参数了\n\
+      \n该命令执行完毕后，查看当前目录结构就会发现里面已经是子目录的内容了。`git log`查看提交历史已经正常保存了。\n\n至此，主要工作已经完成。但是当前的仓库中还保存这一下不需要的`object`，如果想清理这些来减小当前仓库的体积，再看下一步。\n\
+      \n## 清理\n\n    :::bash\n    git reset --hard\n    git for-each-ref --format=\"\
+      %(refname)\" refs/original/ | xargs -n 1 git update-ref -d\n    git reflog expire\
+      \ --expire=now --all\n    git gc --aggressive --prune=now\n\n这些命令到底是怎么work的我也没仔细研究，就不解释了。总是，我的实践证明它们是正常work的，仓库体积减小了不少。\n\
+      \n最后，我们就可以把这个新的仓库提交到服务器上，然后把旧仓库中的`coloshine`子目录删除并以`submodule`的方式添加`coloshine`仓库就好了。\n\
+      \n**参考链接:**\n\n* [Detach subdirectory into separate Git repository](http://stackoverflow.com/questions/359424/detach-subdirectory-into-separate-git-repository)\n\
+      * [Splitting a subpath out into a new repository](https://help.github.com/articles/splitting-a-subpath-out-into-a-new-repository)"
+    created_at: '2013-12-08 00:00:00+08:00'
+    slug: make-a-directory-into-git-submodule
+    summary: 如果我们想要把当前的 git 目录中的一个子目录独立成一个 git submodule，应该怎么做呢？
+    title: 如何把 GIT 仓库的子目录独立为子模块
+    updated_at: '2013-12-08 00:00:00+08:00'
+  model: blog.post
+  pk: 4
+- fields:
+    content: "下面的是**Manual Page**的说明：\n\n> A blank line matches no files, so it can\
+      \ serve as a separator for readability.\n> \n> A line starting with # serves\
+      \ as a comment. Put a backslash (\"\\\") in front of the first hash for patterns\
+      \ that begin with a hash.\n> \n> An optional prefix \"!\" which negates the\
+      \ pattern; any matching file excluded by a previous pattern will become included\
+      \ again. If a negated pattern matches, this will override lower precedence patterns\
+      \ sources. Put a backslash (\"\\\") in front of the first \"!\" for patterns\
+      \ that begin with a literal \"!\", for example, \"\\!important!.txt\".\n> \n\
+      > If the pattern ends with a slash, it is removed for the purpose of the following\
+      \ description, but it would only find a match with a directory. In other words,\
+      \ foo/ will match a directory foo and paths underneath it, but will not match\
+      \ a regular file or a symbolic link foo (this is consistent with the way how\
+      \ pathspec works in general in git).\n> \n> If the pattern does not contain\
+      \ a slash /, git treats it as a shell glob pattern and checks for a match against\
+      \ the pathname relative to the location of the .gitignore file (relative to\
+      \ the toplevel of the work tree if not from a .gitignore file).\n> \n> Otherwise,\
+      \ git treats the pattern as a shell glob suitable for consumption by fnmatch(3)\
+      \ with the FNM_PATHNAME flag: wildcards in the pattern will not match a / in\
+      \ the pathname. For example, \"Documentation/*.html\" matches \"Documentation/git.html\"\
+      \ but not \"Documentation/ppc/ppc.html\" or \"tools/perf/Documentation/perf.html\"\
+      .\n> \n> A leading slash matches the beginning of the pathname. For example,\
+      \ \"/*.c\" matches \"cat-file.c\" but not \"mozilla-sha1/sha1.c\".\n\n我仔细读了半天，发现还是没弄懂，还是亲自做实验吧。\n\
+      \n其实没弄懂的主要是第4，5，6条，一个个解决吧。\n\n## If the pattern ends with a slash\n\n原文这样：\n\
+      \n> If the pattern ends with a slash, it is removed for the purpose of the following\
+      \ description, but it would only find a match with a directory. In other words,\
+      \ foo/ will match a directory foo and paths underneath it, but will not match\
+      \ a regular file or a symbolic link foo (this is consistent with the way how\
+      \ pathspec works in general in git).\n\n正常情况:\n\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) ✗ cat .gitignore\n    foo/\n    Carl-MBPR ➜  testgitignore git:(master)\
+      \ ✗ tree -a -L 1\n    .\n    ├── .git\n    ├── .gitignore\n    └── foo\n   \
+      \ Carl-MBPR ➜  testgitignore git:(master) ✗ git status\n    # On branch master\n\
+      \    # Untracked files:\n    #   (use \"git add <file>...\" to include in what\
+      \ will be committed)\n    #\n    #   foo\n    nothing added to commit but untracked\
+      \ files present (use \"git add\" to track)\n    Carl-MBPR ➜  testgitignore git:(master)\
+      \ ✗ rm foo\n    Carl-MBPR ➜  testgitignore git:(master) mkdir foo\n    Carl-MBPR\
+      \ ➜  testgitignore git:(master) touch foo/file\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) tree -L 2\n    .\n    └── foo\n        └── file\n\n    1 directory,\
+      \ 1 file\n    Carl-MBPR ➜  testgitignore git:(master) git status\n    # On branch\
+      \ master\n    nothing to commit, working directory clean\n\n子目录中的表现：\n\n   \
+      \ Carl-MBPR ➜  testgitignore git:(master) mkdir somefolder\n    Carl-MBPR ➜\
+      \  testgitignore git:(master) touch somefolder/foo\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) ✗ git status\n    # On branch master\n    # Untracked files:\n\
+      \    #   (use \"git add <file>...\" to include in what will be committed)\n\
+      \    #\n    #   somefolder/\n    nothing added to commit but untracked files\
+      \ present (use \"git add\" to track)\n    Carl-MBPR ➜  testgitignore git:(master)\
+      \ ✗ rm somefolder/foo\n    Carl-MBPR ➜  testgitignore git:(master) mkdir somefolder/foo\n\
+      \    Carl-MBPR ➜  testgitignore git:(master) touch somefolder/foo/file\n   \
+      \ Carl-MBPR ➜  testgitignore git:(master) git status\n    # On branch master\n\
+      \    nothing to commit, working directory clean\n\n**结论**：这里的规则是在所有目录层级中都有效的。\n\
+      \n## If the pattern does not contain a slash\n\n> If the pattern does not contain\
+      \ a slash /, git treats it as a shell glob pattern and checks for a match against\
+      \ the pathname relative to the location of the .gitignore file (relative to\
+      \ the toplevel of the work tree if not from a .gitignore file).\n\n实验：\n\n \
+      \   Carl-MBPR ➜  testgitignore git:(master) cat .gitignore\n    foo\n\n正常情况：\n\
+      \n    Carl-MBPR ➜  testgitignore git:(master) touch foo\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) git status\n    # On branch master\n    nothing to commit, working\
+      \ directory clean\n\n    Carl-MBPR ➜  testgitignore git:(master) rm foo\n  \
+      \  Carl-MBPR ➜  testgitignore git:(master) mkdir foo\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) touch foo/file\n    Carl-MBPR ➜  testgitignore git:(master) tree\n\
+      \    .\n    └── foo\n        └── file\n\n    1 directory, 1 file\n    Carl-MBPR\
+      \ ➜  testgitignore git:(master) git status\n    # On branch master\n    nothing\
+      \ to commit, working directory clean\n\n子目录中表现：\n\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) mkdir somefolder\n    Carl-MBPR ➜  testgitignore git:(master)\
+      \ touch somefolder/foo\n    Carl-MBPR ➜  testgitignore git:(master) tree\n \
+      \   .\n    ├── foo\n    │   └── file\n    └── somefolder\n        └── foo\n\n\
+      \    2 directories, 2 files\n    Carl-MBPR ➜  testgitignore git:(master) git\
+      \ status\n    # On branch master\n    nothing to commit, working directory clean\n\
+      \n**结论**：这里的规则也是对所有子目录有效。\n\n## Otherwise, git treats the pattern as a shell\
+      \ glob suitable for consumption by fnmatch(3) with the FNM_PATHNAME flag\n\n\
+      原文:\n\n> Otherwise, git treats the pattern as a shell glob suitable for consumption\
+      \ by fnmatch(3) with the FNM_PATHNAME flag: wildcards in the pattern will not\
+      \ match a / in the pathname. For example, \"Documentation/*.html\" matches \"\
+      Documentation/git.html\" but not \"Documentation/ppc/ppc.html\" or \"tools/perf/Documentation/perf.html\"\
+      .\n\n实验：\n\n    Carl-MBPR ➜  testgitignore git:(master) cat .gitignore\n   \
+      \ foo/*.file\n\n正常情况：\n\n    Carl-MBPR ➜  testgitignore git:(master) mkdir foo\n\
+      \    Carl-MBPR ➜  testgitignore git:(master) touch foo/aa\n    Carl-MBPR ➜ \
+      \ testgitignore git:(master) ✗ git status\n    # On branch master\n    # Untracked\
+      \ files:\n    #   (use \"git add <file>...\" to include in what will be committed)\n\
+      \    #\n    #   foo/\n    nothing added to commit but untracked files present\
+      \ (use \"git add\" to track)\n    Carl-MBPR ➜  testgitignore git:(master) ✗\
+      \ mv foo/aa foo/aa.file\n    Carl-MBPR ➜  testgitignore git:(master) tree\n\
+      \    .\n    └── foo\n        └── aa.file\n\n    1 directory, 1 file\n    Carl-MBPR\
+      \ ➜  testgitignore git:(master) git status\n    # On branch master\n    nothing\
+      \ to commit, working directory clean\n\n子目录中表现：\n\n    Carl-MBPR ➜  testgitignore\
+      \ git:(master) mkdir somefolder\n    Carl-MBPR ➜  testgitignore git:(master)\
+      \ mkdir somefolder/foo\n    Carl-MBPR ➜  testgitignore git:(master) touch somefolder/foo/some.file\n\
+      \    Carl-MBPR ➜  testgitignore git:(master) ✗ tree\n    .\n    ├── foo\n  \
+      \  │   └── aa.file\n    └── somefolder\n        └── foo\n            └── some.file\n\
+      \n    3 directories, 2 files\n    Carl-MBPR ➜  testgitignore git:(master) ✗\
+      \ git status\n    # On branch master\n    # Untracked files:\n    #   (use \"\
+      git add <file>...\" to include in what will be committed)\n    #\n    #   somefolder/\n\
+      \    nothing added to commit but untracked files present (use \"git add\" to\
+      \ track)\n\n**结论**：该类型规则不会在子目录中生效。\n\n## 总结\n\n1. 当规则是简单文件（目录）名的匹配的话，会在当前目录和子目录中生效。\n\
+      2. 如果规则中包含的路径（即使不是绝对路径），该规则都只会在当前目录生效。\n3. 可以使用`/foo`的形式来从项目根目录开始匹配。"
+    created_at: '2014-01-22 00:00:00+08:00'
+    slug: rules-of-gitignore
+    summary: 关于 .gitignore 的语法规则我一直没有很明白，今天决心要弄懂。
+    title: 关于 gitignore 的规则
+    updated_at: '2014-01-22 00:00:00+08:00'
+  model: blog.post
+  pk: 5
+- fields:
+    content: "## 基本类型\n\n`datetime` 库里面主要有这么五种数据：\n\n* date\n* datetime\n* time\n\
+      * timedelta\n* tzinfo\n\n### date\n\n`date` 表示纯粹的日期数据，即 “2020-02-21” 这种，不含时区概念。\n\
+      \n文档里面有这么一句：\n\n> January 1 of year 1 is called day number 1, January 2 of year\
+      \ 1 is called day number 2, and so on.\n\n在加上 `date.fromordinal` 和 `date.toorinal`\
+      \ 这两个方法，我觉得其内部可能就是用 `day number` 这个整型数来表示的。不过这个无所谓啦。\n\n### time\n\n`time` 表示时间数据，即\
+      \ ”12:22:34” 这种，但是它是**可以**有时区概念 `time.tzinfo` 在里面的。\n\n关于 Time Zone 的东西下面会详细说，这里先不说了。\n\
+      \n### datetime\n\n`datetime` 是 `date` 和 `time` 的结合体，表示完整的时间概念，即 ”2014-02-21\
+      \ 12:23:23” 这种。也是**可以**有时区概念的。\n\n另外，`datetime` 是 `date` 的子类。\n\n### timedelta\n\
+      \n`timedelta` 表示时间长度（时间差），很好理解，没啥好说的。\n\n### tzinfo\n\n即 Time Zone Info，时区信息。这个原始的\
+      \ `tzinfo` 是一个抽象基类，不应该直接实例化，应该子类化并实现一些必要函数再使用。\n\n需要实现的函数如下：\n\n* tzinfo.utcoffset(self,\
+      \ dt)\n* tzinfo.dst(self, dt)\n* tzinfo.tzname(self, dt)\n\n待实现的这些函数主要都是用于被\
+      \ `datetime` 或者 `time` 实例调用。逻辑会在下面说明。\n\n## 关于时区\n\n上面说到 `datetime` 和 `time`\
+      \ 是**可以**有时区概念的，为什么是**可以**有呢？\n\n先从文档里面直接拿出两个名词：\n\n> There are two kinds of\
+      \ date and time objects: “naive” and “aware”.\n\n“Naive” Object 表示单纯的时间数据，不包含时区信息，所以无法直接进行时区转换等操作。\n\
+      \n“Aware” Object 表示包含了时区信息的时间数据，这其实才是真实世界中可以在时间轴上找到自己位置的对象。由于带有了时区信息，所以也就原生支持了各时区转换等操作。\n\
+      \n同样是一个 `datetime` (或者 `time`)对象，当 `datetime.tzinfo is None`时它就是 ”naive” 的，否则`datetime.tzinfo`存放了时区信息，它就是\
+      \ ”aware” 的。\n\n让一个 naive 对象变成 aware 对象最直接的方法就是给它设置一个 `tzinfo` 对象：\n\n```python\n\
+      n = datetime.now()\n# 注意，replace方法只会直接修改属性值，不会自动根据时区做时间调整\nn.replace(tzinfo=sometz)\n\
+      ```\n\n如果对一个 naive 对象调用一些跟时区相关的方法(如: `datetime.astimezone`)，就会报错或无效，因为这些方案的实现中通常需要使用\
+      \ `datetime.tzinfo` 中实现的方法。\n\n`tzinfo` 只是一个抽象基类，定义了一些子类化时候需要实现的方案，在python的标准库里面没有任何实现。\n\
+      \n可以为什么呢？标准库里面不应该有一些基本的通用的实现么。猜测估计是由于当前世界上各时区的混乱（还有夏令时这种奇葩的东西），以及各平台下时区信息的存储方式的差异，导致不适合在标准库里面实现吧。\n\
+      \n实现一个最简单的 UTC Time Zone 如下：\n\n```python\nfrom datetime import tzinfo, timedelta\n\
+      \nZERO = timedelta(0)\n\nclass UTC(tzinfo):\n    # 本时区与UTC时间的差值\n    def utcoffset(self,\
+      \ dt):\n        return ZERO\n\n    # 时区名称\n    def tzname(self, dt):\n     \
+      \   return “UTC”\n\n    # 夏令时\n    def dst(self, dt):\n        return ZERO\n\
+      ```            \n\n当然也没有必要真的就自己手动实现，使用 `pytz` 或者 `dateutils` 这些第三方库就好了。\n\n\
+      ## 关于时间戳 (TimeStamp)\n\n时间戳的含义就是 UTC 时间 1970-01-01 00:00:00 到当前时间的秒数，这本质上是一个时间差，所以没有时区的概念。\n\
+      \n对于时间戳的操作，主要涉及的是另一个标准库 `time`，注意这里的 `time` 并不是 `datetime.time`。\n\n获取当前时间戳:\n\
+      \n```python\nimport time\ncurrent_timestamp = time.time()\n```\n\n## 使用 Naive\
+      \ 对象\n\n标准库里面没有实现 `tzinfo` ，所以如果我们没有使用第三方库，那么我们一定都是在使用 *Naive* 对象了。\n\n但是，实际情况是即时我们使用的都是\
+      \ *Naive* 对象，还是会有 Local 时间和 UTC 时间的区分！这就是我之前一直很混乱的地方。\n\n其实，如果只需要做本地时间和 UTC\
+      \ 时间的转换是用不着 `tzinfo` 的。\n\n### datetime.now([tzinfo])\n\n`datetime.now` 是一个类函数，返回表示当前时间的\
+      \ `datetime` 对象。它有一个可选参数，可传入一个具体的时区信息来返回指定时区的当前时间。如果不带参数调用，那么它会返回本地时间的 *naive*\
+      \ 对象。\n\n比如，我现在是北京时间 `2014-03-21 14:11:00`:\n\n```python\n>>> from datetime\
+      \ import datetime\n>>> now = datetime.now()\n>>> print now\n2014-03-21 14:11:23.414917\n\
+      ```\n\n虽然返回的是本地时间（北京时间），但是它是 *naive* 对象，不带时区信息！\n\n```python\n>>> print now.tzinfo\n\
+      None\n```\n\n如果想要得到 UTC 时间:\n\n```python\n>>> utcnow = datetime.utcnow()\n>>>\
+      \ print utcnow\n2014-03-21 06:16:10.025043\n```\n\n### datetime <=> timestamp\n\
+      \n本地时间和时间戳之间转换:\n\n```python\n>>> now = datetime.now()\n>>> print now\n2014-03-21\
+      \ 14:22:11\n>>> ts = time.mktime(now.timetuple())\n>>> print ts\n1395382931.0\n\
+      >>> _now = datetime.fromtimestamp(ts)\n>>> print _now\n2014-03-21 14:22:11\n\
+      ```\n\n如果想把时间戳转成 UTC 时间:\n\n    >>> _utcnow = datetime.utcfromtimestamp(ts)\n\
+      \    >>> print _utcnow\n    2014-03-21 06:22:11\n\n如果想把 UTC 时间转成时间戳:\n\n   \
+      \ >>> ts = time.mktimefromutc(datetime.utcnow().timetuple())\n    Traceback\
+      \ (most recent call last):\n      File \"<stdin>\", line 1, in <module>\n  \
+      \  AttributeError: 'module' object has no attribute 'mktimefromutc'\n\n好吧，总觉得\
+      \ `time` 里面缺少这这么个函数，不过我们可以这么来：\n\n```python\nutcnow = datetime.utcnow()\nts_from_utcdt\
+      \ = time.mktime(utcnow.timetuple()) - time.timezone\n```\n\n或者:\n\n```python\n\
+      import calendar\nts_from_utcdt = calendar.timegm(utcnow.timetuple())\n```\n\n\
+      又用到了 `calendar` 这个库，真够乱的。\n    \n### Local DateTime <=> UTC DateTime\n\n对于 naive\
+      \ 对象，貌似没有方法能够直接支持本地时间和 UTC 时间转换的，所以只能从 TimeStamp 中绕一圈了。\n\nLocal DateTime =>\
+      \ UTC DateTime\n\n    >>> print now\n    2014-03-21 14:41:42.529159\n    >>>\
+      \ ts = time.mktime(now.timetuple())\n    >>> utcnow = datetime.utcfromtimestamp(ts)\n\
+      \    >>> print utcnow\n    2014-03-21 06:41:42\n\nUTC DateTime => Local DateTime\n\
+      \n    >>> utc = datetime.utcnow()\n    >>> print utc\n    2014-03-21 06:44:15.069810\n\
+      \    >>> ts = time.mktime(utc.timetuple()) - time.timezone\n    >>> local =\
+      \ datetime.fromtimestamp(ts)\n    >>> print local\n    2014-03-21 14:44:15\n\
+      \n## 使用 Aware 对象\n\n如果使用 `Aware` 对象，一些貌似都清晰了不少。\n\n### datetime.now([tzinfo])\n\
+      \n我们可以返回一个指定时区的 `datetime`\n\n    >>> from datetime import datetime\n    >>>\
+      \ import pytz\n    >>> tz_cn = pytz.timezone(\"Asia/Shanghai\")\n    >>> tz_us\
+      \ = pytz.timezone('America/Los_Angeles')\n    >>> print datetime.now(tz_cn)\n\
+      \    2014-03-21 14:58:38.059945+08:00\n    >>> print datetime.now(tz_us)\n \
+      \   2014-03-20 23:58:45.427634-07:00\n    >>> print datetime.now(pytz.UTC)\n\
+      \    2014-03-21 06:58:56.507517+00:00\n\n并且它是 `aware` 的\n\n    >>> dt_cn = datetime.now(tz_cn)\n\
+      \    >>> dt_cn.tzinfo\n    <DstTzInfo 'Asia/Shanghai' CST+8:00:00 STD>\n\n###\
+      \ 时区转换\n\n对于`aware`对象之间的转换很简单:\n\n    >>> dt_cn = datetime.now(tz_cn)\n    >>>\
+      \ print dt_cn\n    2014-03-21 15:04:21.700744+08:00\n    >>> dt_us = dt_cn.astimezone(tz_us)\n\
+      \    >>> print dt_us\n    2014-03-21 00:04:21.700744-07:00\n\n对于非 `aware` 的对象，可以先将其转换成\
+      \ `aware` 的再操作：\n\n    >>> dt_naive = datetime.utcnow()\n    >>> print dt_naive\n\
+      \    2014-03-21 07:05:58.194690\n    >>> dt_utc = dt_naive.replace(tzinfo=pytz.UTC)\n\
+      \    >>> print dt_utc\n    2014-03-21 07:05:58.194690+00:00\n    >>> dt_cn =\
+      \ dt_utc.astimezone(tz_cn)\n    >>> print dt_cn\n    2014-03-21 15:05:58.194690+08:00\n\
+      \n对于 `aware` 对象和时间戳的转换，我觉得还是全都转成 UTC 时间再操作吧。"
+    created_at: '2014-03-21 00:00:00+08:00'
+    slug: python-datetime-and-timezone
+    summary: 突然发现之前一直都理解有误，仔细读了一遍文档，这里做个记录。
+    title: Python Datetime and Timezone
+    updated_at: '2014-03-21 00:00:00+08:00'
+  model: blog.post
+  pk: 6
+- fields:
+    content: "又被一个问题折腾了半天，找到原因，记录下来。\n\n## 问题描述\n\n使用 `SQLAlchemy` 建立一对多的 `relationship`：\n\
+      \n```python\nclass Parent(db.Model):\n    __tablename__ = \"parent\"\n    id\
+      \ = db.Column(db.Integer, primary_key=True)\n    name = db.Column(db.Text)\n\
+      \n\nclass Child(db.Model):\n    __tablename__ = \"child\"\n    id = db.Column(db.Integer,\
+      \ primary_key=True)\n\n    parent_id = db.Column(db.Integer,\n             \
+      \             db.ForeignKey(\"parent.id\", ondelete=\"CASCADE\"),\n        \
+      \                  nullable=False)\n    parent = db.relationship(\"Parent\"\
+      , backref=\"children\")\n\n    name = db.Column(db.Text)\n```\n\n先增加一个 `parent`\
+      \ 和其下的两个 `child` ，然后删除这个 `parent`\n\n```python\n#增加记录\np = Parent(name=\"P1\"\
+      )\np.children.append(Child(name=\"C1\"))\np.children.append(Child(name=\"C2\"\
+      ))\ndb.session.add(p)\ndb.session.commit()\n\n#删除记录\ndb.session.delete(p)\n\
+      db.session.commit()\n```\n\n报错：\n\n    EGIN (implicit)\n    SELECT parent.id\
+      \ AS parent_id, parent.name AS parent_name\n    FROM parent\n    WHERE parent.id\
+      \ = ?\n    (1,)\n    SELECT child.id AS child_id, child.parent_id AS child_parent_id,\
+      \ child.name AS child_name\n    FROM child\n    WHERE ? = child.parent_id\n\
+      \    (1,)\n    UPDATE child SET parent_id=? WHERE child.id = ?\n    (None, 1)\n\
+      \    ROLLBACK\n    Traceback (most recent call last):\n      File \"main.py\"\
+      , line 44, in <module>\n        test()\n      File \"main.py\", line 41, in\
+      \ test\n        db.session.commit()\n      ……\n      File \"build/bdist.macosx-10.4-x86_64/egg/sqlalchemy/engine/default.py\"\
+      , line 388, in do_execute\n    sqlalchemy.exc.IntegrityError: (IntegrityError)\
+      \ child.parent_id may not be NULL u'UPDATE child SET parent_id=? WHERE child.id\
+      \ = ?' (None, 1)\n\n\n很明显错误原因是由于 `sa` 在处理删除 `parent` 的时候产生了\n\n    'UPDATE child\
+      \ SET parent_id=? WHERE child.id = ?' (None, 1)\n\n这样的 SQL 语句。而 `child` 的外键设置里面明确有\
+      \ `nullable=False`，所以提交失败。\n\n## 问题解决\n\n我之前一直以为当我在外键设置里面有 `ondelete=\"CASCADE\"\
+      ` 这一条之后，`sa` 应该会自动产生级联的删除命令，或者只产生单独对 `parent` 的删除SQL，让数据库自己产生对 `child` 的删除。可事实是\
+      \ `sa` 产生了 `SET NULL` 这样的 SQL，为什么呢。\n\n网上搜索未果，再从官方文档找答案，终于找到了。\n\n### ForeignKey(..ondelete)\n\
+      \n这里的 `ondelete` 控制的只是创建数据库 Schema 时候的 ONDELETE 规则，不会影响运行中 `sa` 如何产生 SQL 命令。\n\
+      \n### relationship(…cascade)\n\n这里参数参数才会影响 `sa` 如何级联产生 SQL 语句，默认值为 `save-update,\
+      \ merge`，这就是罪魁祸首。\n\n把它设置成 `all, delete-orphan` 之后，`sa` 就会产生级联的删除命令，而不是 `set\
+      \ null` 命令了。\n\n```python\nparent = db.relationship(\"Parent\", backref=db.backref(\"\
+      children\",  cascade=\"all, delete-orphan\"))\n```\n\n输出：\n\n```sql\nBEGIN (implicit)\n\
+      SELECT parent.id AS parent_id, parent.name AS parent_name\nFROM parent\nWHERE\
+      \ parent.id = ?\n(1,)\nSELECT child.id AS child_id, child.parent_id AS child_parent_id,\
+      \ child.name AS child_name\nFROM child\nWHERE ? = child.parent_id\n(1,)\nDELETE\
+      \ FROM child WHERE child.id = ?\n((1,), (2,))\nDELETE FROM parent WHERE parent.id\
+      \ = ?\n(1,)\nCOMMIT\n```\n\ncascade还有很多其他选项，可具体查看文档。\n\n### relationship(…passive_deletes)\n\
+      \n这是另一种可选的解决方案。\n\n如果想完全靠数据库的`ONDELETE`规则在自动删除数据，应该将该`passive_deletes`置为True，这样就不会在删除的时候产生多余的SQL命令了。\n\
+      \n```python\nparent = db.relationship(\"Parent\", backref=db.backref(\"children\"\
+      ,  passive_deletes=True))\n```\n\n输出:\n\n```sql\nSELECT parent.id AS parent_id,\
+      \ parent.name AS parent_name\nFROM parent\nWHERE parent.id = ?\n(1,)\nDELETE\
+      \ FROM parent WHERE parent.id = ?\n(1,)\nCOMMIT\n```"
+    created_at: '2014-03-24 00:00:00+08:00'
+    slug: cascade-delete-in-sqlalchemy
+    summary: SqlAlchemy 中的外键级连删除是怎么一个回事呢？
+    title: SQLAlchemy 中的级联删除
+    updated_at: '2014-03-24 00:00:00+08:00'
+  model: blog.post
+  pk: 7
+- fields:
+    content: "为了在数据库里面存储一些比较随意的结构化数据，我参照(抄袭) `sqlalchemy` 的文档实现了一个自定义类型：\n\n```python\n\
+      class JSON(TypeDecorator):\n    \"\"\" Json String Field \"\"\"\n    impl =\
+      \ Text\n\n    def process_bind_param(self, value, dialect):\n        if value\
+      \ is None:\n            return value\n        elif isinstance(value, (dict,\
+      \ list)):\n            return json.dumps(value)\n        else:\n           \
+      \ raise ValueError(\"unsupported value type\")\n\n    def process_result_value(self,\
+      \ value, dialect):\n        if value is None:\n            return value\n  \
+      \      else:\n            return json.loads(value)\n\n\nclass MyModel(Base):\n\
+      \    ...\n    json = Column(JSON, default=[])\n\n    def add_item(self, item):\n\
+      \        self.json.append(item)\n```\n        \n\n其实这本质上就是把 python 的 `dict `或\
+      \ `list` 直接 dumps 成 json 内容存入数据库，从数据库读出之后再自动 `loads` 成 `dict` 或者 `list` 来使用。\n\
+      \n但是再使用的过程中发现了一个问题。对这个 `MyModel` 的实例无论怎么修改其 json 字段都无法正常保存到数据库中，目测应该是 SA 没有检测到这个字段的变化而导致的。重新翻看文档，发现文档里面已经有说明了。\n\
+      \n> Note that the ORM by default will not detect “mutability” on such a type\
+      \ - meaning, in-place changes to values will not be detected and will not be\
+      \ flushed. Without further steps, you instead would need to replace the existing\
+      \ value with a new one on each parent object to detect changes. Note that there’s\
+      \ nothing wrong with this, as many applications may not require that the values\
+      \ are ever mutated once created. For those which do have this requirement, support\
+      \ for mutability is best applied using the sqlalchemy.ext.mutable extension\
+      \ - see the example in Mutation Tracking.\n\n再看看 `sqlalchemy.ext.mutable` 模块的文档，发现使用起来也没有那么简练，而我只想找个方法来主动标记字段变更就行了。于是翻看\
+      \ `mutable` 模块的代码，找到了其最重要的一句：\n\n```python\nfrom sqlalchemy.orm.attributes import\
+      \ flag_modified\n\nclass Mutable(MutableBase):\n\n    def changed(self):\n \
+      \       \"\"\"Subclasses should call this method whenever change events occur.\"\
+      \"\"\n\n        for parent, key in self._parents.items():\n            flag_modified(parent,\
+      \ key)\n```\n\n其实就是这个 `flag_modified` 标记了修改状态，所以只需要把我自己的代码改一句就行了。\n\n```python\n\
+      from sqlalchemy.orm.attributes import flag_modified\n\nclass MyModel(Base):\n\
+      \    ...\n    json = Column(JSON, default=[])\n\n    def add_item(self, item):\n\
+      \        self.json.append(item)\n        flag_modified(self, \"json\")\n```\n\
+      \n打完收工。"
+    created_at: '2014-06-16 00:00:00+08:00'
+    slug: sqlalchemy-flag-changed
+    summary: 如何在 SqlAlchemy 中强制标记一个字段已变更呢？
+    title: SqlAlchemy 标记字段变更
+    updated_at: '2014-06-16 00:00:00+08:00'
+  model: blog.post
+  pk: 8
+- fields:
+    content: "当我们对一个已存在数据的 Table 中添加一个 `nullable=False` 的列时，通常 `alembic` 会直接报错，因为它不知道要给这个列赋予什么值，所以会默认给个\
+      \ `NULL` 的值，但是这个值与 `nullable=False` 的规则冲突了。\n\n通常这种不能为空的列都是应该有一个默认值的，所以可以直接在\
+      \ alembic 中指定这个列的默认值：\n\n```python\nop.add_column('callroom', sa.Column('consulvalid',\
+      \ sa.Integer(), nullable=True, server_default=text(\"0\")))\n```\n\n但也有可能这个默认值只想在\
+      \ Python 的 `orm` 环境中定义，不想定义到数据库中，比如\n\n```python\nclass MyClass(Base):\n   \
+      \ name = Column(Unicode(40), default=u'hello')    \n```\n\n这种情况下，可以这么修改 alembic\
+      \ 迁移脚本：\n\n```python\nfrom sqlalchemy.sql import table, column\nop.add_column('callroom',\
+      \ sa.Column('consulvalid', sa.Boolean(), nullable=True))\ncallroom = table(\"\
+      callroom\", column(\"consulvalid\", sa.Boolean()))\nop.execute(callroom.update().values(consulvalid=False))\n\
+      op.alter_column(\"callroom\", \"consulvalid\", nullable=False)    \n```\n\n\
+      即先增加了一个 `nullable=True` 的列，然后将这个列设置默认值后，再改成 `nullable=False` 。\n\n## 2015-2-10\
+      \ 更新\n\n上面的方法适用于给一个列赋一个固定值，但是如果我们想要把另一个列的值赋予这个新增列怎么办呢。\n\n凭感觉写了一下实现方法，试了一下果然成功了。目前没精力去研究清楚原理，就先记录下来吧。\n\
+      \n```python\nfrom sqlalchemy.sql import table, column\ntopic = table(\"forum_topic\"\
+      , \n              column(\"update_time\", sa.DateTime()), \n              column(\"\
+      pintop_time\", sa.DateTime()))\nop.execute(topic.update().values(pintop_time=topic.c.update_time))\n\
+      ```"
+    created_at: '2014-08-14 00:00:00+08:00'
+    slug: alembic-add-not-null-column
+    summary: 对于如何使用 alembic 对已有数据的表添加一个 nullable 为 false 的列的记录。
+    title: Alembic 添加不能为空的列
+    updated_at: '2014-08-14 00:00:00+08:00'
+  model: blog.post
+  pk: 9
+- fields:
+    content: '标题是书名，昨天开始看了一部分。里面的核心内容__结构化拖延法__的确挺有意思的。其核心是依赖了这么一个"理论"：
+
+
+      > 人们总是会对当前该干的事情之外的事情很有热情
+
+
+      基于这个论据，首先可以解决一个问题：很多拖延症人对自己的行为感到非常的羞愧和自卑。其实完全不用羞愧，因为：
+
+
+      > 你不是也做完了很多件不该干的事情了么
+
+
+      虽然不该干，那也只是当时的重要性不是最高而已，但毕竟还是完成了很多件事情了啊。虽然耽误了最重要的事情，但是很可能你自己过高的估计了它的重要性了。所以，
+
+
+      > 别自悲，你很棒
+
+
+      这个__结构化拖延法__还有一个意义就是，其实你是可以利用这种看似不好的"理论"：把自己所有要做的事情尽量都列出来，按重要性排序。然后当你不想干一件__挺重要__的事情的时候，你就会吧一些__不重要__的事情先做了来满足自己不去干那件__重要__的事情的愿望。嗯，结果就是__重要__的事情没干好，但是回头一看，你还是完成了很多的事情的。当然，前提得时那些__重要__的事情并不是那么的致命。'
+    created_at: '2014-08-21 00:00:00+08:00'
+    slug: the-art-of-procrastination
+    summary: 又是一个读完书之后的碎碎念。
+    title: 拖拉一点也无妨
+    updated_at: '2014-08-21 00:00:00+08:00'
+  model: blog.post
+  pk: 10
+- fields:
+    content: "之前在设计暖暖数据库的使用，出于对开发效率的考虑，使用了简单粗暴的方式直接将用户的心事录音数据存放在数据库中（不过现在看来这种方式也是没有什么问题的）。然后实现暖暖的管理后台及咨询师工作后台的时候，对于如何在浏览器中播放录音，也是使用最简单的`<audio>`标签的方式，通过一个链接将录音数据直接暴露给`<audio>`标签。\n\
+      \nPython 端代码：\n```python\n@bp.route(\"/<uuid:id>/audio\")\n@require_right\n\
+      def audio(id):\n    item = bs_record.get_record(id) or bs_record.get_reply(id)\n\
+      \    if not item:\n        abort(404)\n    r = Response(item.voice.data, mimetype=\"\
+      audio/mp4\")\n    return r\n```\n\n前端代码：\n```html+jinja\n<audio controls=\"\
+      controls\" volume=\"1.0\">\nYour browser does not support the <code>audio</code>\
+      \ element.\n<source src=\"{{ url_for(\".audio\", id=record.id) }}\" type=\"\
+      audio/mp4\">\n</audio>\n```\n\n这种方式是可以实现基本形式上正常工作的，但是有一些问题。\n\n1. 浏览器不会自动缓存录音数据，导致每次刷新浏览器时都会从服务器下载所有录音数据；有些录音列表页面中有上百的`audio`标签，这个数据量还是很大的，会导致浏览器和服务器卡顿；\n\
+      2. 浏览器端点击播放按钮后，音频可以正常播放，但是播放结束后不能恢复，无法进行第二次播放；\n3. 浏览器端无法通过拖动进度条的方式来控制播放的起始位置；\n\
+      4. Safari 在`https`的环境下无法播放音频，`http`环境下则正常；\n\n昨天下午不知怎么有了一些思路，于是就磕磕碰碰最终把这些问题解决了。这里记录下解决的所有经过与思考。\n\
+      \n## 关于 Cache\n\n>在解决缓存问题的过程中发现 Chrome 与 Safari 的表现不一致，这里就不详细说明区别了，只拿 Chrome\
+      \ 作为目标来说明。\n\n首先要解决浏览器从不缓存音频数据的问题。\n\n首先我知道浏览器的缓存行为是受 HTTP 请求 Header 来控制的。然后看到浏览器对一些\
+      \ css 和 js 文件做了很好的缓存处理了，所以只要对比这些文件和音频文件的 Response Header 的区别就可以找到解决办法了。\n\n\
+      经测试 Chrome 浏览器对这些 css 文件的缓存逻辑其实有两层。第一层是最直观的缓存：浏览器把文件保存到本地，下次就不再向服务器请求文件了，直接使用本地的文件。但是当我在某个页面下直接<kbd>Command+R</kbd>强制刷新页面时，上面说的第一层缓存就会失效，浏览器会向服务器发送请求，但这时服务器不是直接返回请求的文件数据，而是返回了一个`304\
+      \ Not Modified`\n的 Response，表示服务器端的该文件没有变化，浏览器可以直接使用本地缓存的文件。这样虽然依然会发送请求，但是 Response\
+      \ 里面不会带有文件内容，会极大的减少消耗的带宽，这就是第二层缓存。\n\n首先对比一下 css 文件的 Response 和音频文件的 Response\
+      \ 的头信息：\n\n```\nCSS:\nCache-Control:public, max-age=43200\nConnection:keep-alive\n\
+      Content-Length:99548\nContent-Type:text/css; charset=utf-8\nDate:Thu, 25 Sep\
+      \ 2014 07:24:31 GMT\nETag:\"flask-1402394227.18-99548-239868049\"\nExpires:Thu,\
+      \ 25 Sep 2014 19:24:31 GMT\nLast-Modified:Tue, 10 Jun 2014 09:57:07 GMT\nServer:nginx/1.6.0\n\
+      \nAUDIO:\nConnection:keep-alive\nContent-Length:32344\nContent-Type:audio/mp4\n\
+      Date:Thu, 25 Sep 2014 07:06:50 GMT\nServer:nginx/1.6.0\n```\n\n可以看到区别是 css 文件的头信息里面多了`Cache-Control`、`ETag`、`Expires`、`Last-Modified`这些头。\n\
+      \n大概查阅了一些资料，这些头信息的确都是和缓存控制有关的。而当前对 css 文件的处理是用`flask.send_file`来处理的，我可以也用这个函数来将音频数据模拟成文件。代码如下：\n\
+      \n```python\n@bp.route(\"/<uuid:id>/audio\")\n@require_right\ndef item_audio(id):\n\
+      \    from StringIO import StringIO\n    from flask import send_file\n    item\
+      \ = bs_record.get_record(id) or bs_record.get_reply(id)\n    if not item:\n\
+      \        abort(404)\n    return send_file(StringIO(item.voice.data),\n     \
+      \                mimetype=\"audio/mp4\")\n```\n\n这样，浏览器收到的 Response 头信息如下：\n\
+      \n```\nCache-Control:public, max-age=43200\nConnection:keep-alive\nContent-Type:audio/mp4\n\
+      Date:Thu, 25 Sep 2014 07:36:19 GMT\nExpires:Thu, 25 Sep 2014 19:36:19 GMT\n\
+      Server:nginx/1.6.0\n```\n\n可以看到，里面添加了`Cache-Control`和`Expires`头。这时浏览器的行为已经变化了，在切换页面的过程中已经会使用缓存在本地的音频文件而不是重新发送请求了。但是如果使用<kbd>Command+R</kbd>强制刷新页面时，浏览器还是会从服务器重新获取所有的文件数据。也就是说，上面提到的\
+      \ __第一层缓存__ 已经实现了，但是 __第二层缓存__ 还是不可用的状态，我们继续。\n\n这时可以注意到，我们还没有用到`Etag`这个东西，查资料知道，这个头信息是可以表示当前文件状态的，当浏览器本地有文件缓存时，它在重新请求文件的时候会将这个文件的`Etag`放在请求中告诉服务器，而服务器可以通过这个`Etag`来判断这个文件是否有变化，如果有变化就将文件数据返回给浏览器，如果没有变化就直接返回`304\
+      \ Not Modified`让浏览器直接使用本地缓存的文件。这就是 __第二层缓存__ 的逻辑了。\n\n所以我们只要实现`Etag`逻辑就可以了。看了`flask.send_file`代码，发现其实里面已经有了`Etag`逻辑的实现，不过它是基于发送的是\
+      \ _文件_ 这种场景的，我们用来伪装文件的`StringIO`不是很适用，所以需要自己修改一些代码：\n\n```python\ndef send_voice_stream(voice):\n\
+      \    from time import mktime, time\n    from werkzeug.datastructures import\
+      \ Headers\n    mime = \"audio/mp4\"\n    timestamp = int(mktime(voice.create_time.timetuple()))\n\
+      \    etag = \"warmup-audio-%s-%s\" % (voice.id.hex, timestamp)\n    cache_timeout\
+      \ = 3600\n\n    headers = Headers()\n\n    length = len(voice.data)\n    data\
+      \ = voice.data\n    resp = current_app.response_class(data, mimetype=mime,\n\
+      \                                      headers=headers)\n\n    resp.headers[\"\
+      Content-Length\"] = len(data)\n    resp.cache_control.pushlic = True\n    resp.cache_control.max_age\
+      \ = cache_timeout\n    resp.expires = int(time() + cache_timeout)\n    resp.set_etag(etag)\n\
+      \n    return resp.make_conditional(request)   \n\n@bp.route(\"/<uuid:id>/audio\"\
+      )\n@require_right\ndef item_audio(id):\n    item = bs_record.get_record(id)\
+      \ or bs_record.get_reply(id)\n    if not item:\n        abort(404)\n    return\
+      \ send_voice_stream(item.voice)\n```\n\n这样，加上了`Etag`逻辑之后的 Response 头信息如下：\n\n\
+      ```\nCache-Control:max-age=3600\nConnection:keep-alive\nContent-Length:26349\n\
+      Content-Type:audio/mp4\nDate:Thu, 25 Sep 2014 07:53:20 GMT\nETag:\"warmup-audio-f3d9fd66ddcd4b01a2e34da3124aa2f5-1411591761\"\
+      \nExpires:Thu, 25 Sep 2014 08:53:20 GMT\nServer:nginx/1.6.0\n```\n\n强制刷新浏览器，浏览器发送的请求和收到的回复的头信息如下：\n\
+      \n```\nRequest:\n----------------\nAccept:*/*\nAccept-Encoding:identity;q=1,\
+      \ *;q=0\nAccept-Language:zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4,zh-TW;q=0.2\nCache-Control:max-age=0\n\
+      Connection:keep-alive\nHost:work.warmup.local\nIf-None-Match:\"warmup-audio-70cbab169e4f4a1fad7796f7f025299d-1411580347\"\
+      \nRange:bytes=0-35920\n\nResponse:\n-----------------\nCache-Control:max-age=3600\n\
+      Connection:keep-alive\nDate:Thu, 25 Sep 2014 07:54:27 GMT\nETag:\"warmup-audio-70cbab169e4f4a1fad7796f7f025299d-1411580347\"\
+      \nExpires:Thu, 25 Sep 2014 08:54:27 GMT\nServer:nginx/1.6.0\n```\n\n服务器终于返回了`304`。至此，对于缓存的优化已经完成了。\n\
+      \n## 关于 206 Partical Content\n\n接下来要解决的是浏览器的`audio`标签不能拖动的问题。\n\n网上搜寻了一番，得到了一个关键词`Stream\
+      \ Server`、`206 Partical Content`、`Range`。最终，我发现，我的音频文件接口缺少了一个返回`206 Partical\
+      \ Content`的能力。如果这个实现了，`audio`标签就可以正常工作了。\n\n看了几个关于 Flask 中如下实现`206 Partical\
+      \ Content`的文章：\n\n+ [response to a range request][]\n+ [http 206 for flask][]\n\
+      \n发现逻辑还是很简单的，无非就是根据请求头中指明的`Range`来返回文件的其中一部分数据就行了。但是这两篇文章有个问题就是全部都自己造了一个轮子，但是我发现`werkzeug`里面已经有对应的代码实现了，既然都用了\
+      \ Flask 也应该用上 Werkzeug 提供的各种轮子啊。所以我可以给出比他们更优雅的代码:\n\n```python\n    if request.range:\n\
+      \        start, end = request.range.range_for_length(length)\n        data =\
+      \ voice.data[start:end]\n        content_range = request.range.make_content_range(length)\n\
+      \        resp = current_app.response_class(data, 206, mimetype=mime,\n     \
+      \                                     headers=headers)\n        resp.content_range\
+      \ = content_range\n    else:\n        data = voice.data\n        resp = current_app.response_class(data,\
+      \ mimetype=mime,\n                                          headers=headers)\n\
+      ```\n\n扩展了一下`send_voice_stream`最终代码如下：\n\n```python\ndef send_voice_stream(voice):\n\
+      \    \"\"\" 发送语音流，支持 ETag、Cache Control、Partial Content \"\"\"\n    from time\
+      \ import mktime, time\n    from werkzeug.datastructures import Headers\n   \
+      \ mime = \"audio/mp4\"\n    timestamp = int(mktime(voice.create_time.timetuple()))\n\
+      \    etag = \"warmup-audio-%s-%s\" % (voice.id.hex, timestamp)\n    cache_timeout\
+      \ = 3600\n\n    headers = Headers()\n    headers[\"Accept-Ranges\"] = \"bytes\"\
+      \n\n    length = len(voice.data)\n    if request.range:\n        start, end\
+      \ = request.range.range_for_length(length)\n        data = voice.data[start:end]\n\
+      \        content_range = request.range.make_content_range(length)\n        resp\
+      \ = current_app.response_class(data, 206, mimetype=mime,\n                 \
+      \                         headers=headers)\n        resp.content_range = content_range\n\
+      \    else:\n        data = voice.data\n        resp = current_app.response_class(data,\
+      \ mimetype=mime,\n                                          headers=headers)\n\
+      \n    resp.headers[\"Content-Length\"] = len(data)\n    resp.cache_control.pushlic\
+      \ = True\n    resp.cache_control.max_age = cache_timeout\n    resp.expires =\
+      \ int(time() + cache_timeout)\n    resp.set_etag(etag)\n\n    return resp.make_conditional(request)\n\
+      ```\n\n大功告成，不正常工作的`audio`标签全部都乖乖听话了，连 Safari 在 https 下的问题也不存在了，看来这些问题都是这个原因。\n\
+      \n我不知道这个`Partical Content`是不是流媒体服务器的一个核心概念，但是它能让`audio`标签正常工作，随意选择播放进度，这应该跟正真的流媒体相差不远了吧。\n\
+      \n本文完结，给自己点个赞 ^_^。\n\n[response to a range request]: http://librelist.com/browser/flask/2011/10/5/response-to-a-range-request/#1e95dd715f412161d3db2fc8aaf8666f\n\
+      [http 206 for flask]: http://blog.asgaard.co.uk/2012/08/03/http-206-partial-content-for-flask-python"
+    created_at: '2014-09-09 00:00:00+08:00'
+    slug: html5-audio-tag
+    summary: 关于 html5 中的 audio 标签的填坑之路。
+    title: Html5 Audio Tag and Cache
+    updated_at: '2014-09-09 00:00:00+08:00'
+  model: blog.post
+  pk: 11
+- fields:
+    content: "有时候网站访问比较慢了，就想看看服务器当前的上行下行网速是多少。网上搜了一下发现貌似没有直接可用的工具，只能自己写个脚本了。\n\n这个脚本的思路就是在`ifconfig`的结果的基础上添加显示对应的`interface`的网速，就把它叫做`ifspeed`吧，这个名字起码看起来比较高大上。\n\
+      \n文件`ifspeed`内容如下：\n\n```python\n#!/usr/bin/env python\n# -*- coding: utf-8\
+      \ -*-\nimport os\nimport re\nimport sys\nimport time\n\nif len(sys.argv) ==\
+      \ 2:\n    eths = [sys.argv[1]]\nelse:\n    raw = os.popen(\"ifconfig\").read().strip().split(\"\
+      \\n\\n\")\n    eths = [s.split(None, 1)[0] for s in raw]\n\nold = {}\n\ndef\
+      \ print_info(eth):\n    raw = os.popen(\"ifconfig \" + eth).read().strip()\n\
+      \    ts = time.time()\n    rx = int(re.search(r\"RX bytes:(\\d+)\", raw).group(1))\n\
+      \    tx = int(re.search(r\"TX bytes:(\\d+)\", raw).group(1))\n    oldvalue =\
+      \ old.get(eth)\n    if oldvalue:\n        oldts, oldrx, oldtx = oldvalue\n \
+      \       spdrx = (rx - oldrx) / (ts - oldts) / 1024\n        spdtx = (tx - oldtx)\
+      \ / (ts - oldts) / 1024\n        spdinfo = \"\\n          RX speed:%.1f kBps\
+      \  TX speed:%.1f kBps\" \\\n            % (spdrx, spdtx)\n        out = raw\
+      \ + spdinfo\n    else:\n        out = raw\n\n    sys.stdout.write(out)\n   \
+      \ sys.stdout.write(\"\\n\\n\")\n    sys.stdout.flush()\n\n    old[eth] = (ts,\
+      \ rx, tx)\n\n\nwhile True:\n    os.system('cls' if os.name == 'nt' else 'clear')\n\
+      \    for eth in eths:\n        print_info(eth)\n    time.sleep(1)\n```\n\n看看效果吧：\n\
+      \n    ~ » ifspeed\n    eth0      Link encap:Ethernet  HWaddr be:4e:ae:9e:be:4e\n\
+      \              inet addr:192.168.1.20  Bcast:192.168.1.255  Mask:255.255.255.0\n\
+      \              inet6 addr: fe80::bc4e:aeff:fe9e:be4e/64 Scope:Link\n       \
+      \       UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1\n              RX\
+      \ packets:7822185 errors:0 dropped:0 overruns:0 frame:0\n              TX packets:3044230\
+      \ errors:0 dropped:0 overruns:0 carrier:0\n              collisions:0 txqueuelen:1000\n\
+      \              RX bytes:2321603045 (2.3 GB)  TX bytes:2542711955 (2.5 GB)\n\
+      \              RX speed:0.2 kBps  TX speed:3.4 kBps\n\n    lo        Link encap:Local\
+      \ Loopback\n              inet addr:127.0.0.1  Mask:255.0.0.0\n            \
+      \  inet6 addr: ::1/128 Scope:Host\n              UP LOOPBACK RUNNING  MTU:16436\
+      \  Metric:1\n              RX packets:7886469 errors:0 dropped:0 overruns:0\
+      \ frame:0\n              TX packets:7886469 errors:0 dropped:0 overruns:0 carrier:0\n\
+      \              collisions:0 txqueuelen:0\n              RX bytes:3355470528\
+      \ (3.3 GB)  TX bytes:3355470528 (3.3 GB)\n              RX speed:0.0 kBps  TX\
+      \ speed:0.0 kBps\n\n每个`Interface`下面最后一行就是这个脚本添加的，输出数据会每秒自动刷新，效果还不错吧。"
+    created_at: '2014-09-21 00:00:00+08:00'
+    slug: a-script-names-ifspeed
+    summary: 写一个脚本自己用。
+    title: 一个显示服务器当前网速的脚本
+    updated_at: '2014-09-21 00:00:00+08:00'
+  model: blog.post
+  pk: 12
+- fields:
+    content: "今晚又纠结了好长时间关于如何实现一个 html 中的竖直居中，总算找到一个还不错的方案。\n\n对于这个“还不错”的定义，主要是以下两点：\n\
+      \n1. 最好不需要关心任何高度，实在不行的话至少不需要关心父元素的高度；\n2. 实现的方式较为自然；\n\n找到的方法如下：\n\n```css\n\
+      .absolute-center {\n    position: absolute;\n    left: 0;\n    right: 0;\n \
+      \   top: 0;\n    bottom: 0;\n    margin: auto;\n}\n```\n\n只需要将这个`absolute-center`元素放在一个`position:\
+      \ relative`的容器中，并且指定该元素的高度即可实现竖直居中，如何指定了宽度会同时实现水平居中。\n\n原理比较好理解，首先让子元素强制完全填充父元素。然后`margin:\
+      \ auto`会让不够填充的空间自动产生左右及上下对等的`margin`。\n\n示例如下:\n\n<div id=\"sample\">\n    <style\
+      \ type=\"text/css\">\n    #sample {\n        width: 100%;\n        height: 200px;\n\
+      \        padding: 10px;\n        margin: 5px;\n        box-shadow: gray 0 0\
+      \ 2px;\n    }\n    #sample > .sample-container {\n        border: gray solid\
+      \ 1px;\n        position: relative;\n        height: 100%;\n    }\n    .absolute-center\
+      \ {\n        position: absolute;\n        left: 0;\n        right: 0;\n    \
+      \    top: 0;\n        bottom: 0;\n        margin: auto;\n    }\n    </style>\n\
+      \    <div class=\"sample-container\">\n        <div class=\"absolute-center\"\
+      \ style=\"width: 100px; height: 100px; background-color: yellow;\"></div>\n\
+      \    </div>\n</div>\n\n-------------------------\n\n参考链接：\n[Absolute Horizontal\
+      \ And Vertical Centering In CSS](http://www.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-centering-css/)，还有一个[各种方案的整理](http://www.gbtags.com/gb/gbliblist/20.htm)。\n\
+      \nPS. 关于是否能够在html>body中添加css，可以参考[StackOverFlow上的回答](http://stackoverflow.com/questions/2830296/using-style-tags-in-the-body-with-other-html)。"
+    created_at: '2014-11-20 00:00:00+08:00'
+    slug: css-vertial-center
+    summary: 关于最优雅实现 css 竖直方向居中的苦苦追寻。
+    title: 关于CSS竖直居中
+    updated_at: '2014-11-20 00:00:00+08:00'
+  model: blog.post
+  pk: 13
+- fields:
+    content: "下面是一个默认设置的 htop 的界面截图，我们把各个输出数值做一个解释。\n\n![htop 截图](https://s3-us-west-1.amazonaws.com/hhb-s/iamhhb/tmp/htop.png)\n\nCPU，Mem，Swp\
+      \ 分辨为 cpu、内存、交换分区使用率。\n\n`Tasks: 32, 12 thr; 1 running` 这段表示：当前有 32 个进程，12 个线程，其中\
+      \ 1 个进程是 running 的。这里的 running 我的理解就是正在使用 cpu 而非休眠状态。\n\n`Load average: 0.20\
+      \ 0.07` 表示当前系统的负荷：最近 5 分钟平均为 0.20，最近 15 分钟平均为 0.07。系统负荷 1.0 表示满负荷，大于 1.0 表示有任务在排队了。\n\
+      \n`Uptime: 00:00:51` 不用说了，就是系统已经运行的时间。\n\n接下来是一个表格，每个进程或线程为一个行，各个列的意义如下：\n\n\
+      - PID: Process ID, 进程 ID；\n- USER: 进程以哪个用户的身份运行的；\n- PRI: 即 Priority，进程优先级，默认都为\
+      \ 20；\n- NI: 即 Nice，对 Priority 的修正值；\n- VIRT: 该进程使用的虚拟内存量；\n- RES: 该进程使用的固定内存量，这个基本上就表示真正使用的内容量，包括了交换分区和共享内存的使用；\n\
+      - SHR: 该进程使用的共享内存量；\n- S: 该进程当前的状态；可能的状态包括下面几种:\n  1. R (Running): 正在运行中；\n\
+      \  2. S (Sleep): 正在睡眠状态，但可以被唤醒；\n  3. D: 不可唤醒的睡眠状态，通常为等待 I/O 的情况；\n  4. T: 停止状态，可能是后台暂停或除错\
+      \ (traced) 状态；\n  5. Z (Zombie): 僵尸进程，表示进程已经终止，但是资源却没有正常释放；\n- CPU%: cpu 占用量；\n\
+      - MEM%: 内存占用量；\n- TIME+: 累计使用的 cpu 时间；\n- Command: 进程的启动命令；\n\n## 参考\n\n1. [理解Linux系统负荷](http://www.ruanyifeng.com/blog/2011/07/linux_load_average_explained.html)\n\
+      2. [Linux 下的内容查看](http://www.vimer.cn/2009/12/linux%E4%B8%8B%E7%9A%84%E5%86%85%E5%AD%98%E6%9F%A5%E7%9C%8B%EF%BC%88virtresshrdata%E7%9A%84%E6%84%8F%E4%B9%89%EF%BC%89.html)\n\
+      3. [「鸟哥的 Linux 私房菜」](https://book.douban.com/subject/4889838/)"
+    created_at: '2016-04-16 00:00:00+08:00'
+    slug: htop-output-summary
+    summary: 用了很久的 htop 了，但是还是对其默认输出的一些数值不理解，这里 Google 并记录下来。
+    title: Htop 输出解释
+    updated_at: '2016-04-16 00:00:00+08:00'
+  model: blog.post
+  pk: 14
+- fields:
+    content: "今天看书的过程中看到讲并发控制的章节，突然想到我一直想搞清楚却没搞清楚的数据库事务间的并发控制是怎样的。于是就 Google 了一下，下面记录下来。\n\
+      \n## 定义\n\n首先，数据库事务的四个特性 ACID 从维基百科上抄下来如下：\n\n1. 原子性（atomicity）：一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。\n\
+      2. 一致性（consistency）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。\n\
+      3. 隔离性（isolation）：数据库允许多个并发事务同时对齐数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read\
+      \ uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。\n\
+      4. 持久性（durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。\n\n我现在主要关注的就是其**隔离性**，即当我们在两个独立的事务中分别对同一块数据进行读写操作时会怎样呢？\n\
+      \nSQL 标准用三个需要在并行事务之前避免的现象，定义了四个事务隔离级别。这三个现象是：\n\n1. 脏读（dirty reads）：一个事务读取了另一个未提交的并行事务写的数据。\n\
+      2. 不可重复读（non-repeatable reads）：一个事务重新读取前面读取过的数据， 发现该数据已经被另一个已提交的事务修改过。\n3. 幻读（phantom\
+      \ read）：一个事务重新执行一个查询，返回一套符合查询条件的行， 发现这些行因为其他最近提交的事务而发生了改变。\n\n四个隔离级别定义如下：\n\n\
+      隔离级别 |  脏读 |  不可重复读  | 幻读  |\n--- | --- | --- | ---\n读未提交（Read uncommitted）\
+      \ | 可能 | 可能 | 可能 \n读已提交（Read committed） | 不可能 | 可能 | 可能\n可重复读（Repeatable read）\
+      \ | 不可能 | 不可能 | 可能 \n可串行化（Serializable ）\t | 不可能 | 不可能 | 不可能\n\n## 各数据库的实现情况\n\
+      \n既然 SQL 标准定义了 4 个级别，那么各个数据库的实现可能都有所不同，这里给出几个常用数据库的情况。\n\n数据库 | 读未提交 | 读已提交\
+      \ | 可重复读 | 可串行化\n--- | --- | --- | ---\nPostgreSQL |  - | 默认 | - | 可选\nMySQL/InnoDB\
+      \ | 可选 | 可选 | 默认 | 可选\nSqlite | 可选 | - | - | 默认\n\n> 上表中`-`表示未实现\n\nPostgreSQL\
+      \ 对于两种隔离级别的具体表现细节在[文档中已经讲的很清楚了](http://www.postgresql.org/docs/9.5/interactive/transaction-iso.html)。\n\
+      \n\n## 参考\n\n1. [维基百科 ACID](https://zh.wikipedia.org/wiki/ACID)\n2. [PostgreSQL\
+      \ 文档](http://www.postgresql.org/docs/9.5/interactive/transaction-iso.html)\n\
+      3. [Sqlite 文档](https://www.sqlite.org/isolation.html)\n4. [Innodb中的事务隔离级别和锁的关系](http://tech.meituan.com/innodb-lock.html)"
+    created_at: '2016-04-23 00:00:00+08:00'
+    slug: database-transaction-isolation
+    summary: 在使用数据库时，当我们在两个事务中分别对同一块数据进行读写操作时会怎样呢？
+    title: 数据库中的事务隔离
+    updated_at: '2016-04-23 00:00:00+08:00'
+  model: blog.post
+  pk: 15
+- fields:
+    content: "对于自己的个人网站，安全要求没有那么重要。如果想对网站做一个简单的身份验证，可以有两种方式：\n\n1. 直接在 Nginx 中配置一个简单的\
+      \ `auth_basic` 形式的用户名 & 密码；\n2. 或者使用本文要说的 **SSL Client Side Authentication**；\n\
+      \n注：由于 __Client Side Authentication__ 太长，下文会用 **CSA** 这个缩写来代替。\n\n## 为什么用这个\n\
+      \n两个原因：\n\n1. 安全。这个不用说了，只有拥有证书的人才能被认证，就排除了密码被破解的可能性；\n2. 方便。不用输入用户名密码什么的了啊；\n\
+      \n## 配置过程\n\n首先需要明确，CSA 的配置过程和网站的 **Server Side Authentication** 是完全独立的，两者没有什么关系。\n\
+      \n### 环境准备\n\n安装 openssl 工具。\n\n```bash\nbrew install openssl\n```\n\n准备一个空目录。\n\
+      \n```bash\nmkdir certs\ncd certs\n```\n\n### 创建根证书\n\n```bash\n# generate primary\
+      \ key\nopenssl genrsa -des3 -out ca.key 4096\n# or if you don't want a password:\n\
+      openssl genrsa -out ca.key 4096\n# generate a cert\nopenssl req -new -x509 -days\
+      \ 365 -key ca.key -out ca.crt\n```\n\n生成 ca.crt 文件的时候会需要填写一些信息，看着填就好了，关系不大。我是这么填写的：\n\
+      \n```bash\n$ openssl req -new -x509 -days 365 -key ca.key -out ca.crt\nYou are\
+      \ about to be asked to enter information that will be incorporated\ninto your\
+      \ certificate request.\nWhat you are about to enter is what is called a Distinguished\
+      \ Name or a DN.\nThere are quite a few fields but you can leave some blank\n\
+      For some fields there will be a default value,\nIf you enter '.', the field\
+      \ will be left blank.\n------\nCountry Name (2 letter code) [AU]:CN\nState or\
+      \ Province Name (full name) [Some-State]:Beijing\nLocality Name (eg, city) []:Beijing\n\
+      Organization Name (eg, company) [Internet Widgits Pty Ltd]:\nOrganizational\
+      \ Unit Name (eg, section) []:Hongbo He\nCommon Name (e.g. server FQDN or YOUR\
+      \ name) []:Hongbo He\nEmail Address []:me@graycarl.me\n```\n\n然后生成的证书长这样：\n\n\
+      \ ![cert-1](https://s3-us-west-1.amazonaws.com/hhb-s/iamhhb/tmp/cert-1.png)\n\n这里创建的 ca.crt 是会放到服务端的，接下来我们创建安装在客户端的证书。\n\n### 创建客户端证书\n\
+      \n首先是创建证书请求：\n\n```bash\nopenssl genrsa -out client.key 4096\nopenssl req -new\
+      \ -key client.key -out client.csr\n```\n\n这里同样会需要输入一些信息，看着输入就好。\n\n然后使用 ca 证书进行签发：\n\
+      \n```bash\nopenssl x509 -req -days 365 -in client.csr -CA ca.crt -CAkey ca.key\
+      \ -set_serial 01 -out client.crt\n```\n\n这样就签发好了客户端证书 client.crt。\n\n### 安装客户端证书\n\
+      \n上一步产生的 `client.crt` 并不能直接安装，需要转成 PKCS 格式：\n\n```bash\nopenssl pkcs12 -export\
+      \ -clcerts -in client.crt -inkey client.key -out client.p12\n```\n\n这里的 client.p12\
+      \ 在 MacOS 上就可以直接双击安装到系统的 KeyChain 里面。\n\n### 部署到服务器\n\n服务端只需要一个 ca.crt 文件即可。\n\
+      \n```bash\nscp sa.crt somebody@someserver:/etc/nginx/certs/client-auth-ca.crt\n\
+      ```\n\nNginx 中加入如下的配置：\n\n```nginx\nserver {\n    ...\n    ssl_client_certificate\
+      \ /etc/nginx/certs/client-auth-ca.crt;\n    ssl_verify_client optional;\n  \
+      \  ...\n}\n```\n\n其中 `ssl_verify_client` 的值可以是 `optional | on` 者两个：\n\n1. 当选择\
+      \ `on` 时会强制进行客户端认证，失败无法访问；\n2. 当选择 `optional` 的时候，认证是可选的，是否认证成功可以从 `$ssl_client_verify`\
+      \ 变量得知。\n\n比如，我们想要网站根目录是任意访问的，但是 `/admin` 路径下是需要认证才能访问的，就可以这么配置：\n\n```nginx\n\
+      server {\n    ...\n    ssl_client_certificate /etc/nginx/certs/client-auth-ca.crt;\n\
+      \    ssl_verify_client optional;\n    ...\n\n    location /admin {\n       \
+      \ if ($ssl_client_verify != SUCCESS) {\n            return 401;\n        }\n\
+      \        proxy_pass http://localhost:5000;\n    }\n}\n```\n\n## 完成\n\n当打开网站且本机装有对应的客户端证书时，就会出现请求证书认证的提示框：\n\
+      \n![cert-2](https://s3-us-west-1.amazonaws.com/hhb-s/iamhhb/tmp/cert-2.png)\n\n点确定就可以通过认证啦。\n\n## 参考\n\n[ClientSide SSL](https://gist.github.com/mtigas/952344)\n\
+      \n[Nginx SSL Module](http://nginx.org/en/docs/http/ngx_http_ssl_module.html)"
+    created_at: '2016-09-27 00:00:00+08:00'
+    slug: ssl-client-side-authentication
+    summary: 一个高端的，免用户名密码的登陆方式哦。
+    title: SSL 客户端验证
+    updated_at: '2016-09-27 00:00:00+08:00'
+  model: blog.post
+  pk: 16
+- fields:
+    content: "目前团队习惯于不在数据库中使用外键（ForeignKey），大概是出于性能以及对脏数据的容忍度的考虑吧。这本来没什么，但是由于我们使用\
+      \ SqlAlchemy 作为 ORM，就带来了一个问题：如何在不使用外键的情况下使用 SqlAlchemy 中的各种高级特性呢（如：relationship，单表继承，join表继承等）？\n\
+      \n首先需要明确的是，上面提到的高级特性其实对外键并没有什么直接的依赖关系的，只不过如果存在外键定义的话，很多特性参数可以根据外键的定义自动配置好。\n\
+      \n仔细查阅了 SqlAlchemy 的文档，终于整理好了各种场景下的使用方法。\n\n后续的示例代码假设都已经执行了如下片段:\n\n```python\n\
+      import sqlalchemy as sa\nimport sqlalchemy.orm as orm\nfrom sqlalchemy.ext.declarative\
+      \ import declarative_base\n\nBase = declarative_base()\n```\n\n## One-to-Many\
+      \ Relationship\n首先看标准的带外键的表达如下:\n\n```python\nclass Parent(Base):\n    __tablename__\
+      \ = 'parent'\n    id = sa.Column(sa.Integer, primary_key=True)\n    children\
+      \ = orm.relationship('Child', backref='parent')\n\nclass Child(Base):\n    __tablename__\
+      \ = 'child'\n    id = sa.Column(sa.Integer, primary_key=True)\n    parent_id\
+      \ = sa.Column(sa.Integer, sa.ForeignKey('parent.id'))\n```\n\n我们只需要标注出关联的目标，具体如何关联等信息\
+      \ ORM 会根据外键帮我们自动配置好。\n\n而如果不用外键的话，所有的关联关系都需要明确指定，代码就会复杂一些了：\n\n```python\nclass\
+      \ Parent(Base):\n    __tablename__ = 'parent'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    children = orm.relationship(\n        'Child',\n  \
+      \      primaryjoin='Parent.id == Child.parent_id',\n        foreign_keys='Child.parent_id',\n\
+      \        backref='parent')\n\nclass Child(Base):\n    __tablename__ = 'child'\n\
+      \    id = sa.Column(sa.Integer, primary_key=True)\n    parent_id = sa.Column(sa.Integer,\
+      \ sa.ForeignKey('parent.id'))\n```\n\n如上，需要明确指定 `primary join` 和 `foriegn_keys`\
+      \ 这两个参数。\n\n## One-to-One Relationship\n各个只是在一对多关联的基础上添加一个 `uselist=False` 的参数，没啥好说的。\n\
+      \n```python\nclass Parent(Base):\n    __tablename__ = 'parent'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    child = orm.relationship(\n        'Child',\n     \
+      \   primaryjoin='Parent.id == Child.parent_id',\n        foreign_keys='Child.parent_id',\n\
+      \        uselist=False,\n        backref='parent')\n\nclass Child(Base):\n \
+      \   __tablename__ = 'child'\n    id = sa.Column(sa.Integer, primary_key=True)\n\
+      \    parent_id = sa.Column(sa.Integer, sa.ForeignKey('parent.id'))\n```\n\n\
+      ## Many-to-Many Relationship\n同样，先看使用 ForeignKey 的版本：\n\n```python\nassociation_table\
+      \ = sa.Table('association', Base.metadata,\n    sa.Column('left_id', sa.Integer,\
+      \ sa.ForeignKey('left.id')),\n    sa.Column('right_id', sa.Integer, sa.ForeignKey('right.id'))\n\
+      )\n\nclass Parent(Base):\n    __tablename__ = 'left'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    children = orm.relationship(\n        \"Child\",\n\
+      \        secondary=association_table,\n        backref='parents')\n\nclass Child(Base):\n\
+      \    __tablename__ = 'right'\n    id = Column(Integer, primary_key=True)\n```\n\
+      \n不用 ForeignKey 的版本:\n\n```python\nassociation_table = sa.Table('association',\
+      \ Base.metadata,\n    sa.Column('left_id', sa.Integer, sa.ForeignKey('left.id')),\n\
+      \    sa.Column('right_id', sa.Integer, sa.ForeignKey('right.id'))\n)\n\nclass\
+      \ Parent(Base):\n    __tablename__ = 'left'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    children = orm.relationship(\n        \"Child\",\n\
+      \        secondary=association_table,\n        primaryjoin='left.id == association.left_id',\n\
+      \        secondaryjoin='right.id == association.right_id',\n        backref='parents')\n\
+      \nclass Child(Base):\n    __tablename__ = 'right'\n    id = Column(Integer,\
+      \ primary_key=True)\n```\n\n## Single Table Inheritance\n单表继承不需要用到外键，所以可以直接使用：\n\
+      \n```python\nclass Person(Base):\n    __tablename__ = 'people'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    discriminator = sa.Column('type', sa.String(50))\n\
+      \    __mapper_args__ = {'polymorphic_on': discriminator}\n\nclass Engineer(Person):\n\
+      \    __mapper_args__ = {'polymorphic_identity': 'engineer'}\n    primary_language\
+      \ = sa.Column(sa.String(50))\n```\n\n\n## Joined Table Inheritance\n外键版本如下：\n\
+      \n```python\nclass Person(Base):\n    __tablename__ = 'people'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    discriminator = sa.Column('type', sa.String(50))\n\
+      \    __mapper_args__ = {'polymorphic_on': discriminator}\n\nclass Engineer(Person):\n\
+      \    __tablename__ = 'engineers'\n    __mapper_args__ = {'polymorphic_identity':\
+      \ 'engineer'}\n    id = sa.Column(Integer, sa.ForeignKey('people.id'), primary_key=True)\n\
+      \    primary_language = sa.Column(sa.String(50))\n```\n\n去外键版本如下：\n\n```python\n\
+      class Person(Base):\n    __tablename__ = 'people'\n    id = sa.Column(sa.Integer,\
+      \ primary_key=True)\n    discriminator = sa.Column('type', sa.String(50))\n\
+      \    __mapper_args__ = {'polymorphic_on': discriminator}\n\nclass Engineer(Person):\n\
+      \    __tablename__ = 'engineers'\n\n    _id = sa.Column(Integer, primary_key=True)\n\
+      \    __mapper_args__ = {\n        'polymorphic_identity': 'engineer',\n    \
+      \    'inherit_condition': (_id == Person.id),\n        'inherit_foreign_keys':\
+      \ _id,\n    }\n    id = orm.column_property(_id, Person.id)\n    del _id\n\n\
+      \    primary_language = sa.Column(sa.String(50))\n```\n\n这里有两个重点，分别是如何表达继承关联，以及如何将两个表的\
+      \ id 列映射到一个字段上。\n\n在 `__mapper_args__` 中我们手动指定了 `inherit_condition` 和 `inherit_foreign_keys`\
+      \ 这两个参数来表达和父表的关系。\n\n用 `orm.column_property` 可以将多个 column 映射到同一个字段上，这里将子表的 id\
+      \ 和父表的 id 都映射到了 id 这个字段上了，并在结束时，清理掉了多余的 `_id` 这个引用。\n\n其实这里为什么需要将两个 id 列映射到用一个字段上我也不是很清楚，这么做只是为了完整的还原使用外键版本的结果。\n\
+      \n## 小结\n所以说，为啥不用外键呢？"
+    created_at: '2016-12-27 00:00:00+08:00'
+    slug: use-sqlalchemy-without-foreignkey
+    summary: 如何在不使用外键的情况下，继续发挥 SqlAlchemy 的超强动力。
+    title: 当 SqlAlchemy 没有了外键
+    updated_at: '2016-12-27 00:00:00+08:00'
+  model: blog.post
+  pk: 17
