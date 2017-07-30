@@ -18,6 +18,7 @@ mock==2.0.0
 pbr==3.1.1                # via mock
 pip-tools==1.9.0
 psycopg2==2.7.1
+pygments==2.2.0
 pytz==2017.2              # via django
 pyyaml==3.12
 six==1.10.0               # via libsass, mock, pip-tools

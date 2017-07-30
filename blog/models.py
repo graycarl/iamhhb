@@ -1,10 +1,12 @@
 import mistune
 from django.db import models
+from .libs.markdown import Renderer
 
 
 class Post(models.Model):
-    """博客 Model
-    """
+    """博客 Model"""
+
+    markdown = mistune.Markdown(renderer=Renderer())
 
     slug = models.SlugField(max_length=100, null=False, blank=False)
     title = models.CharField(max_length=200, null=False, blank=False)
@@ -19,4 +21,4 @@ class Post(models.Model):
 
     @property
     def html_content(self):
-        return mistune.markdown(self.content)
+        return self.markdown(self.content)
