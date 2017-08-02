@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    'webfs.apps.WebfsConfig',
     'blog.apps.BlogConfig',
     'pipeline',
     'django.contrib.admin',
@@ -144,6 +145,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'html', 'static')
 ]
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+# File storage
+MEDIA_ROOT = os.path.join(BASE_DIR, 'var', 'fs')
+MEDIA_URL = '/fs/'
 
 # Pipeline
 PIPELINE = {
