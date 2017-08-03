@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    'postorage.apps.PostorageConfig',
     'webfs.apps.WebfsConfig',
     'blog.apps.BlogConfig',
     'pipeline',
@@ -94,9 +95,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'var', 'db.sqlite3'),
+    },
+    'pg': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'iamhhbdemo',
+        'USER': 'hongbo',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
-
+DATABASES['default'] = DATABASES['pg']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -188,3 +196,6 @@ PIPELINE = {
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor'
 }
+
+# Use postgresql storage
+DEFAULT_FILE_STORAGE = 'postorage.storage.PostgreStorage'

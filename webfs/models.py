@@ -65,5 +65,5 @@ class WebFile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
-        self.mimetype, _ = mimetypes.guess_type(self.file.path)
+        self.mimetype, _ = mimetypes.guess_type(self.file.name)
         self.size = self.file.size
