@@ -24,6 +24,8 @@ class PostgreStorage(Storage):
     def _open(self, name, mode='rb'):
         pgfile = PGFile.objects.get(name=name)
         lo = self.lobject(pgfile.oid, mode)
+        # Large Object 的操作必须在一个 transaction 中，所以这里只能 Read 出来
+        # 全部的数据生成一下新的 File 传出去
         return ContentFile(lo.read())
 
     @transaction.atomic
