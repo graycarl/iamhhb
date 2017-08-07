@@ -22,4 +22,4 @@ class PostViewTest(TestCase):
         p.save()
         url = reverse('blog:post', args=(p.slug,))
         resp = self.client.get(url)
-        self.assertContains(resp, 'I am hhb, i will fail')
+        self.assertContains(resp, 'I am hhb')
