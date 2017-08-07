@@ -152,7 +152,8 @@ STATICFILES_FINDERS = (
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'html', 'static')
 ]
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+# STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 # File storage
 MEDIA_ROOT = os.path.join(BASE_DIR, 'var', 'fs')
