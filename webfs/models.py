@@ -59,11 +59,12 @@ def upload_to(ins, fn):
 
 class WebFile(models.Model):
     file = models.FileField(upload_to=upload_to)
-    mimetype = models.CharField(max_length=32)
-    size = models.PositiveIntegerField()
-    metadata = JsonField(use_db_null=True, max_length=256)
+    mimetype = models.CharField(max_length=32, blank=True)
+    size = models.PositiveIntegerField(blank=True)
+    metadata = JsonField(use_db_null=True, max_length=256, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
+
         self.mimetype, _ = mimetypes.guess_type(self.file.name)
         self.size = self.file.size

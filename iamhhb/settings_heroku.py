@@ -7,3 +7,6 @@ DEBUG = False
 SECRET_KEY = os.environ['SECRET_KEY']
 DATABASES['default'].update(dj_database_url.config(conn_max_age=50))
 SECURE_SSL_REDIRECT = True
+
+# Use postgresql storage
+DEFAULT_FILE_STORAGE = 'postorage.storage.PostgreStorage'
