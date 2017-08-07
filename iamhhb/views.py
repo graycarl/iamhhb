@@ -19,7 +19,7 @@ def a_lot_tech(request):
         'Language': ['Python', 'HTML', 'JavaScript', 'Sass'],
         'Framework': ['Django', 'Semantic UI'],
         'Package Manager': ['PyPI', 'NPM', 'Bower'],
-        'Platform': ['GitHub', 'Heroku'],
+        'Platform': ['GitHub', 'Heroku', 'Travis-CI'],
         'Database': ['PostgreSQL', 'SQLite']
     }
     return render(request, 'a-lot.html', locals())
