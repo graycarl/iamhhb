@@ -10,14 +10,15 @@
             <p class="summary">{{ post.summary }}</p>
             <p class="time">Published @ {{ post.created_at|date:"M d, Y" }}</p>
         </div>
-        {{ post.html_content|safe }}
+        {{ post.content_html|safe }}
         <div class="ui horizontal divider"> END </div>
     </div>
 
+    {% if post.content_toc %}
     <div class="ui piled segment post-toc">
         <div class="content">
             <h4 class="ui header">章节导航:</h4>
-            <span class="ui gray text">待实现</span>
+            {{ post.content_toc|safe }}
             <!-- <ul class="ui list">
                 <li> <a href="#7d5496"> 定义 </a> </li>
                 <li> <a href="#59bb97"> 各数据库的实现情况 </a> </li>
@@ -25,6 +26,7 @@
             </ul> -->
         </div>
     </div>
+    {% endif %}
 
 </div>
 

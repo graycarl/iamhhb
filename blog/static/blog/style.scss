@@ -13,6 +13,19 @@ body.app-blog > .container {
     .post-content {
         max-width: 50em;
         float: left;
+        /* fix anchor offset
+         * see: https://stackoverflow.com/a/13184714
+         */
+        h1, h2, h3, h4, h5, h6 {
+            &:before {
+                content: '';
+                display: block;
+                position: relative;
+                width: 0;
+                height: 3em;
+                margin-top: -3em
+            }
+        }
     }
     .post-toc {
         margin: 2em 0 0 2em;

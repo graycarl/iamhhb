@@ -8,7 +8,7 @@ class PostModelTest(TestCase):
 
     def test_render_markdown(self):
         p = Post(content='aa')
-        self.assertEqual(p.html_content, '<p>aa</p>\n')
+        self.assertEqual(p.content_html, '<p>aa</p>\n')
 
 
 class PostViewTest(TestCase):

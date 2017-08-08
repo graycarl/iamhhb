@@ -19,6 +19,19 @@ class Post(models.Model):
     def __str__(self):
         return self.slug
 
+    def _render_content(self):
+        self.markdown.renderer.reset_toc()
+        self._content_html = self.markdown(self.content)
+        self._content_toc = self.markdown.renderer.render_toc()
+
     @property
-    def html_content(self):
-        return self.markdown(self.content)
+    def content_html(self):
+        if not hasattr(self, '_content_html'):
+            self._render_content()
+        return self._content_html
+
+    @property
+    def content_toc(self):
+        if not hasattr(self, '_content_toc'):
+            self._render_content()
+        return self._content_toc
