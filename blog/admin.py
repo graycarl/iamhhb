@@ -5,7 +5,7 @@ from .models import Post
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'summary', 'created_at')
+    list_display = ('title', 'summary', 'status', 'created_at')
 
 
 admin.site.register(Post, PostAdmin)
