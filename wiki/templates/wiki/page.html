@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="wiki clearfix">
+
+    <div class="page-content article-content">
+        <h1>{{ page.title }}</h1>
+        <div class="meta">
+            <p class="tags">{{ page.tags.all|join:", " }}</p>
+            <p class="time">Published @ {{ page.created_at|date:"M d, Y" }}</p>
+        </div>
+        {{ page.content_html|safe }}
+        <div class="ui horizontal divider"> END </div>
+    </div>
+
+    {% if page.content_toc %}
+    <div class="ui piled segment page-toc">
+        <div class="content">
+            <h4 class="ui header">章节导航:</h4>
+            {{ page.content_toc|safe }}
+            <!-- <ul class="ui list">
+                <li> <a href="#7d5496"> 定义 </a> </li>
+                <li> <a href="#59bb97"> 各数据库的实现情况 </a> </li>
+                <li> <a href="#6deaa1"> 参考a </a> </li>
+            </ul> -->
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
