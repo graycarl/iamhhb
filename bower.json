@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "semantic": "semantic-ui#^2.2.10"
+    "semantic": "semantic-ui#^2.2.10",
+    "codemirror": "^5.27.4"
   }
 }

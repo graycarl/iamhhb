@@ -171,7 +171,7 @@ PIPELINE = {
         },
         'site': {
             'source_filenames': (
-                'site.js',
+                'site.js'
             ),
             'output_filename': 'site.js'
         }
@@ -179,7 +179,7 @@ PIPELINE = {
     'STYLESHEETS': {
         'libs': {
             'source_filenames': (
-                'libs/semantic/semantic.css',
+                'libs/semantic/semantic.css'
             ),
             'output_filename': 'libs.css'
         },
