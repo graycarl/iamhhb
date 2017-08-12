@@ -8,5 +8,8 @@ function initCodeMirror() {
     if (ta == undefined) {
         return;
     }
-    CodeMirror.fromTextArea(ta, {mode: "markdown"});
+    CodeMirror.fromTextArea(ta, {mode: "markdown", 
+                                 lineWrapping: true, 
+                                 theme: "mdn-like",
+                                 lineNumbers: false});
 }
