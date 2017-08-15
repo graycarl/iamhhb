@@ -11,7 +11,7 @@
     {% javascript 'libs' %}
     {% javascript 'site' %}
     {% block headtail %} {% endblock %}
-    <title>{{ title }}</title>
+    <title>{% block title %}I am HHB{% endblock title %}</title>
 </head>
 <body class="app-{{ request.resolver_match.app_name|default:'null' }} view-{{ request.resolver_match.url_name }}">
     <div class="ui fixed pointing menu">
@@ -21,8 +21,8 @@
                 Hongbo He
             </a>
             <a href="{% url "blog:index" %}" class="item{% active_for 'app' 'blog'%}">Blog</a>
+            <a href="{% url "wiki:index" %}" class="item{% active_for 'app' 'wiki'%}">Wiki</a>
             <a href="#" class="item{% active_for 'app' 'reading'%}">Reading</a>
-            <a href="#" class="item{% active_for 'app' 'wiki'%}">Wiki</a>
             <a href="/about-me" class="item right{% active_for 'view' 'about-me'%}">About Me</a>
         </div>
     </div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'postorage.apps.PostorageConfig',
     'webfs.apps.WebfsConfig',
     'blog.apps.BlogConfig',
+    'wiki.apps.WikiConfig',
     'pipeline',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -186,7 +187,8 @@ PIPELINE = {
         'site': {
             'source_filenames': (
                 'site.scss',
-                'blog/style.scss'
+                'blog/style.scss',
+                'wiki/style.scss'
             ),
             'output_filename': 'site.css'
         }

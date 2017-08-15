@@ -1,16 +1,7 @@
 @import "html/static/commons.scss";
 
-body.app-blog > .container {
-    .ui.items.post-list {
-        .item {
-            .image {
-                text-align: right;
-                color: gray;
-                font-size: 120%;
-            }
-        }
-    }
-    .post-content {
+body.app-wiki > .container {
+    .page-content {
         max-width: 50em;
         float: left;
         /* fix anchor offset
@@ -26,8 +17,17 @@ body.app-blog > .container {
                 margin-top: -3em
             }
         }
+        a.wiki-link {
+            &::before {
+                content: "[ ";
+            }
+            &::after {
+                content: " ]";
+            }
+            margin: 0 0.2em;
+        }
     }
-    .post-toc {
+    .page-toc {
         margin: 2em 0 0 2em;
         float: left;
         width: 16em;
