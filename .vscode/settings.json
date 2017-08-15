@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "${workspaceRoot}/venv/bin/python"
+    "python.pythonPath": "${workspaceRoot}/venv/bin/python",
+    "files.exclude": {
+        "node_modules": true,
+        "bower_components": true,
+        "var": true,
+        "venv": true
+    }
 }

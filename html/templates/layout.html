@@ -11,7 +11,7 @@
     {% javascript 'libs' %}
     {% javascript 'site' %}
     {% block headtail %} {% endblock %}
-    <title>{{ title }}</title>
+    <title>{% block title %}I am HHB{% endblock title %}</title>
 </head>
 <body class="app-{{ request.resolver_match.app_name|default:'null' }} view-{{ request.resolver_match.url_name }}">
     <div class="ui fixed pointing menu">
