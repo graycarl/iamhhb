@@ -1,3 +1,4 @@
+import re
 import mistune
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
@@ -82,5 +83,46 @@ class HighlightMixin:
         return highlight(code, lexer, formatter)
 
 
-class Renderer(TocMixin, HighlightMixin, mistune.Renderer):
+class WikiLinkMixin:
+    """
+    Copy from README.md in mistune github repository.
+    """
+    def wiki_link(self, alt, link):
+        return '<a class="wiki-link" href="%s">%s</a>' % (link, alt)
+
+
+class WikiLinkInlineLexer(mistune.InlineLexer):
+    def enable_wiki_link(self):
+        # add wiki_link rules
+        self.rules.wiki_link = re.compile(
+            r'\[\['                   # [[
+            r'([\s\S]+?)'   # Page 2|Page 2
+            r'\]\](?!\])'             # ]]
+        )
+
+        # Add wiki_link parser to default rules
+        # you can insert it some place you like
+        # but place matters, maybe 3 is not good
+        self.default_rules.insert(3, 'wiki_link')
+
+    def output_wiki_link(self, m):
+        text = m.group(1)
+        if '|' in text:
+            alt, link = text.split('|') 
+        else:
+            alt, link = text, self.slugify(text)
+        return self.renderer.wiki_link(alt, link)
+
+    def slugify(self, text):
+        return text.lower().replace(' ', '-')
+
+
+class Renderer(TocMixin, HighlightMixin, WikiLinkMixin, mistune.Renderer):
     pass
+
+
+def make_markdown():
+    renderer = Renderer()
+    inline = WikiLinkInlineLexer(renderer)
+    inline.enable_wiki_link()
+    return mistune.Markdown(renderer, inline=inline)

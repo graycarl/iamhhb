@@ -1,17 +1,13 @@
-from django.views import generic
+from django.views import generic, View
+from django.shortcuts import render
 from .models import Page
 
 
-class WikiIndexView(generic.ListView):
+class WikiIndexView(View):
 
-    template_name = 'wiki/index.html'
-
-    def get_queryset(self):
-        q = Page.objects.filter()
-        return q.order_by('-created_at')
-
-    # def get(self, request):
-    #     return render(request, 'wiki/index.html')
+    def get(self, request):
+        page = Page.objects.get(slug='home')
+        return render(request, 'wiki/index.html', dict(page=page))
 
 
 class PageDetailView(generic.DetailView):

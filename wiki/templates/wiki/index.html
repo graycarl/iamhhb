@@ -1,18 +1,7 @@
 {% extends "wiki/base.html" %}
 
 {% block content %}
-<div class="ui very relaxed items">
-    {% for page in object_list %}
-    <div class="item">
-        <div class="image">
-            {{ page.created_at|date:"M d, Y" }}
-        </div>
-        <div class="content">
-            <a href="{% url 'wiki:page' page.slug %}" class="header">
-                {{ page.title }}
-            </a>
-        </div>
-    </div>
-    {% endfor %}
+<div class="page-content article-content">
+    {{ page.content_html|safe }}
 </div>
 {% endblock %}

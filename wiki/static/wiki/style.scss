@@ -17,6 +17,15 @@ body.app-wiki > .container {
                 margin-top: -3em
             }
         }
+        a.wiki-link {
+            &::before {
+                content: "[ ";
+            }
+            &::after {
+                content: " ]";
+            }
+            margin: 0 0.2em;
+        }
     }
     .page-toc {
         margin: 2em 0 0 2em;

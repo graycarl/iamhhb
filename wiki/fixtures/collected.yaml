@@ -1,0 +1,719 @@
+- model: wiki.page
+  pk: 3
+  fields:
+    slug: alembic
+    title: Alembic
+    content: "## \u5FFD\u7565\u4E00\u4E9B\u8868\r\n\r\n\u5982\u679C\u5728\u4EA7\u751F\
+      \u81EA\u52A8\u8FC1\u79FB\u7684\u65F6\u5019\u5FFD\u7565\u67D0\u4E9B\u8868\uFF1A\
+      https://gist.github.com/utek/6163250\r\n\r\n## \u6DFB\u52A0\u5217\u81EA\u52A8\
+      \u4EA7\u751F MySQL \u4E2D\u9700\u8981\u7684 AFTER \u503C\r\n\r\n```python\r\n\
+      # in env.py\r\nfrom sqlalchemy.ext.compiler import compiles\r\nfrom alembic.ddl.base\
+      \ import AddColumn, alter_table, add_column\r\n\r\n@compiles(AddColumn)\r\n\
+      def visit_add_column(element, compiler, **kw):\r\n    sql = \"%s %s\" % (\r\n\
+      \        alter_table(compiler, element.table_name, element.schema),\r\n    \
+      \    add_column(compiler, element.column, **kw)\r\n    )\r\n    if 'after' in\
+      \ element.column.info:\r\n        sql += ' AFTER `%s`' % element.column.info['after']\r\
+      \n    return sql\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.198537+00:00
+    updated_at: 2017-08-15 14:50:57.118691+00:00
+    tags: [6, 8]
+- model: wiki.page
+  pk: 4
+  fields:
+    slug: atom
+    title: Atom
+    content: "\u8FD9\u91CC\u8BB0\u5F55\u4E00\u4E9B\u81EA\u7528\u7684\u57FA\u7840\u914D\
+      \u7F6E\u3002\r\n\r\n## Plugins\r\n\r\n- linter-flake8\r\n- autocomplete-python\r\
+      \n- vim-mode-plus\r\n- project-manager\r\n- git-plus\r\n- symbols-tree-view\r\
+      \n- markdown-toc\r\n\r\n## CORE\r\n\r\n- ignoredNames: \u6DFB\u52A0 *.pyc, __pycache__\r\
+      \n\r\n\r\n## Editor\r\n\r\n- fontFamily: \"'M+ 2m'\"\r\n- tabLength: 4\r\n\r\
+      \n## linter-flake8\r\n\r\n- executablePath: \"$PROJECT/venv/bin/flake8;flake8\"\
+      \r\n\r\n## tree-view\r\n\r\n- hideIgnoredNames: True"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.201813+00:00
+    updated_at: 2017-08-15 14:50:47.666090+00:00
+    tags: [8, 10]
+- model: wiki.page
+  pk: 5
+  fields:
+    slug: bash
+    title: Bash
+    content: "## PATH\r\n\r\nMAC \u4E2D\u53EF\u4EE5\u76F4\u63A5\u4FEE\u6539 `/etc/paths`\
+      \ \u8FD9\u4E2A\u6587\u4EF6\u6765\u4FEE\u6539 Shell \u4E2D\u9ED8\u8BA4\u7684\
+      \ `$PATH` \u7684\u503C\u3002\r\n\r\nUbuntu \u7CFB\u7EDF\u4E2D\u53EF\u4EE5\u4FEE\
+      \u6539 `/etc/environment` \u6765\u81EA\u5B9A\u4E49\u5404\u79CD\u53D8\u91CF\u7684\
+      \u503C\u3002\r\n\r\n## \u5173\u4E8E\u5F15\u53F7\u548C\u8F6C\u4E49\r\n\r\n1.\
+      \ \u53CC\u5F15\u53F7\u4E2D\u7684\u5185\u5BB9\u4F1A\u8F6C\u4E49\uFF0C\u800C\u5355\
+      \u5F15\u53F7\u4E0D\u4F1A\r\n```sh\r\ncarl at Carl-MBPR in ~\r\n$ name=hongbo\r\
+      \n\r\ncarl at Carl-MBPR in ~\r\n$ echo \"name is $name\"\r\nname is hongbo\r\
+      \n\r\ncarl at Carl-MBPR in ~\r\n$ echo 'name is $name'\r\nname is $name\r\n\
+      ```\r\n2. \u4E00\u4E2A\u6280\u5DE7\r\n```sh\r\ncarl at Carl-MBPR in ~\r\n$ echo\
+      \ \"name is '$name'\"\r\nname is 'hongbo'\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.202448+00:00
+    updated_at: 2017-08-15 14:50:35.958734+00:00
+    tags: [4]
+- model: wiki.page
+  pk: 6
+  fields:
+    slug: database-concurrency
+    title: DataBase-Concurrency
+    content: "\u5173\u952E\u8BCD\uFF1A\u4E8B\u52A1\u9694\u79BB\uFF0C\u60B2\u89C2\u9501\
+      \uFF0C\u4E50\u89C2\u9501\u3002\r\n\r\n<http://openwares.net/database/postgresql_updata_lost.html>"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.202949+00:00
+    updated_at: 2017-08-15 14:50:28.879554+00:00
+    tags: [6]
+- model: wiki.page
+  pk: 7
+  fields:
+    slug: django
+    title: Django
+    content: "\u5F00\u59CB\u5B66\u4E60\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.203206+00:00
+    updated_at: 2017-08-15 14:50:20.344781+00:00
+    tags: [5]
+- model: wiki.page
+  pk: 8
+  fields:
+    slug: docker
+    title: Docker
+    content: "## Docker Hub\r\n\r\n\u5BF9\u4E8E\u81EA\u52A8\u6784\u5EFA\u7684\u9879\
+      \u76EE\uFF0C\u5F53\u524D\u662F\u4F7F\u7528\u4E86 Github \u7684\u57FA\u7840\u6388\
+      \u6743\uFF0C\u6240\u4EE5\u9ED8\u8BA4\u4E0D\u4F1A\u5728 Push \u7684\u65F6\u5019\
+      \u89E6\u53D1\u81EA\u52A8\u6784\u5EFA\u3002\u9700\u8981\u5728 Github \u7684\u9879\
+      \u76EE\u8BBE\u7F6E\u4E2D\u7684 Integration&Services \u4E2D\u5F00\u542F Docker\
+      \ \u670D\u52A1\u3002\r\n\r\n## Compose\r\n\r\n\u672C\u5730\u53EF\u4EE5\u7528\
+      \u8FD9\u4E2A\u6765\u5FEB\u901F\u5EFA\u7ACB\u4E00\u4E9B\u6D4B\u8BD5\u73AF\u5883\
+      \u3002\u6BD4\u5982\uFF0C\u6211\u60F3\u8981\u5EFA\u7ACB\u4E00\u4E2A `PostgreSQL`\
+      \ \u7684\u6D4B\u8BD5\u573A\u666F\uFF1A\r\n\r\n1. \u521B\u5EFA\u4E00\u4E2A\u76EE\
+      \u5F55\r\n\r\n   ```bash\r\n   mkdir pgdemo\r\n   ```\r\n\r\n2. \u521B\u5EFA\
+      \ `docker-compose.yml`\r\n\r\n   ```yaml\r\n   server:\r\n     image: postgres\r\
+      \n     environment:\r\n       POSTGRES_PASSWORD: thepasswd\r\n\r\n   client:\r\
+      \n     image: postgres\r\n     environment:\r\n       PGPASSWORD: thepasswd\r\
+      \n     links:\r\n       - server\r\n     command: psql -h server -U postgres\r\
+      \n     stdin_open: true\r\n     tty: true\r\n   ```\r\n\r\n\u8FD9\u6837\u51C6\
+      \u5907\u5DE5\u4F5C\u5B8C\u6210\u3002\r\n\r\n\u4F7F\u7528\u65F6\uFF0C\u5148\u8FD0\
+      \u884C server:\r\n\r\n```bash\r\ndocker-compose create server\r\ndocker-compose\
+      \ start server\r\n```\r\n\r\n\u8FD0\u884C client:\r\n\r\n```bash\r\n$ docker-compose\
+      \ run --rm client\r\npsql (9.6.0)\r\nType \"help\" for help.\r\n\r\npostgres=#\r\
+      \n```\r\n\r\n\u5C31\u53EF\u4EE5\u6109\u5FEB\u7684\u73A9\u800D\u5566\u3002\r\n\
+      \r\n\u6E05\u7406\u8D44\u6E90\uFF1A\r\n\r\n```bash\r\ndocker-compose stop server\r\
+      \ndocker-compose rm -f\r\n```\r\n\r\n## Docker for Mac: connect to another service\
+      \ from a container\r\n\r\n\u89E3\u51B3\u65B9\u6848\u662F\u7ED9\u672C\u673A\u7684\
+      \ `lo0` \u5EFA\u7ACB\u4E00\u4E2A\u522B\u540D\u5730\u5740\uFF0C\u7136\u540E\u5728\
+      \ container \u91CC\u9762\u94FE\u63A5\u8FD9\u4E2A\u522B\u540D\u5730\u5740\uFF1A\
+      \r\n\r\n```bash\r\nsudo ifconfig lo0 alias 10.200.10.1/24\r\n# then use 10.200.10.1\
+      \ in your container\r\n```\r\n\r\n\u5220\u9664\u8FD9\u4E2A\u522B\u540D\u5730\
+      \u5740\u7684\u65B9\u6CD5\u5982\u4E0B\uFF1A\r\n```bash\r\nsudo ifconfig lo0 -alias\
+      \ 10.200.10.1\r\n```\r\nsee: <https://docs.docker.com/docker-for-mac/networking/#/use-cases-and-workarounds>"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.203453+00:00
+    updated_at: 2017-08-15 14:50:12.802925+00:00
+    tags: [5]
+- model: wiki.page
+  pk: 9
+  fields:
+    slug: git
+    title: Git
+    content: "## \u6587\u6863\r\n\r\n<https://git-scm.com/book/zh/v2>\r\n\r\n## \u6280\
+      \u5DE7\r\n\r\n\u67E5\u770B\u4E22\u5931\u7684 Commit\r\n```\r\ngit fsck --lost-found\r\
+      \n```\r\n\r\n\u67E5\u770B\u64CD\u4F5C\u8BB0\u5F55\r\n\r\n```\r\ngit reflog\r\
+      \n```\r\n\r\n\u8BBE\u7F6E\u7F16\u8F91\u5668\r\n```\r\ngit config --global --add\
+      \ core.editor 'vim'\r\n```\r\n\r\n\u6E05\u7406\u672C\u5730\u7684\u8FDC\u7A0B\
+      \u5206\u652F\uFF0C\u5C06\u5176\u4E0E\u8FDC\u7AEF\u540C\u6B65\r\n```\r\ngit fetch\
+      \ origin --prune\r\n```\r\n\r\n## \u5FEB\u901F\u521B\u5EFA PR\r\n\r\n\u5C06\u4E0B\
+      \u9762\u7684\u914D\u7F6E\u52A0\u5230\u4F60\u7684 `~/.gitconfig` \u91CC\u9762\
+      \uFF1A\r\n\r\n```\r\n[alias]\r\n    pj = \"!git remote -v | grep 'upstream.*fetch'\
+      \ | sed 's/^.*:lws\\\\/\\\\(.*\\\\)\\\\.git.*$/\\\\1/'\"\r\n    pr = \"!open\
+      \ https://ghe.liwushuo.com/lws/$(git pj)/compare/master...hehongbo:$(git symbolic-ref\
+      \ --short HEAD)\"\r\n```\r\n\r\n\u4EE5\u540E\u8981\u63D0\u4EA4 PR \u7684\u65F6\
+      \u5019\uFF0C\u5C31\u53EF\u4EE5 `git pr` \u4E00\u952E\u4EA7\u751F PR \u4E86\u3002\
+      \r\n\r\n## Hooks\r\n\r\n\u9700\u8981\u5305\u88C5\u811A\u672C\u662F\u53EF\u6267\
+      \u884C\u7684\uFF1A\r\n```\r\nchmod +x post-commit\r\n```\r\n\r\n## Remove a\
+      \ submodule\r\n\r\n```\r\nmv asubmodule asubmodule_tmp\r\ngit submodule deinit\
+      \ asubmodule    \r\ngit rm asubmodule\r\n# Note: asubmodule (no trailing slash)\r\
+      \n# or, if you want to leave it in your working tree\r\ngit rm --cached asubmodule\r\
+      \nmv asubmodule_tmp asubmodule\r\nrm -rf .git/modules/asubmodule\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.203664+00:00
+    updated_at: 2017-08-15 14:50:03.433320+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 10
+  fields:
+    slug: gollum
+    title: Gollum
+    content: "\u5DF2\u7ECF\u5B89\u88C5\u5230\u672C\u5730\u3002\r\n\r\n\u542F\u52A8\
+      \r\n\r\n```\r\ncd ~/Wikis\r\nnohub gollum &\r\n```\r\n\r\n[On Github](https://github.com/gollum/gollum)"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.203924+00:00
+    updated_at: 2017-08-15 14:49:50.831846+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 11
+  fields:
+    slug: gunicorn
+    title: Gunicorn
+    content: "Gunicorn \u7684 `--name|-n` \u53C2\u6570\u914D\u5408 `setproctitle`\
+      \ \u5E93\u53EF\u4EE5\u8BA9\u8FDB\u7A0B\u540D\u79F0\u53D8\u5F97\u597D\u770B\u5F88\
+      \u591A\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.204245+00:00
+    updated_at: 2017-08-15 14:49:30.499870+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 12
+  fields:
+    slug: html
+    title: HTML
+    content: "## \u5BF9\u4E8E Html \u4E2D\u8868\u5355\u63D0\u4EA4\u4E2D\u7684 Textarea\
+      \ \u4E2D\u7684\u6362\u884C\u7684\u7814\u7A76\r\n\r\n\u4E00\u76F4\u4E0D\u786E\
+      \u5B9A\u8FD9\u4E2A\u884C\u4E3A\u5728\u5404\u4E2A\u5E73\u53F0\u7684\u8868\u73B0\
+      \u662F\u600E\u6837\u7684\uFF0C\u56E0\u4E3A\u76EE\u524D\u7684\u4E09\u4E2A\u4E3B\
+      \u8981\u5E73\u53F0\u7684\u6362\u884C\u7B26\u5E76\u4E0D\u4E00\u6837\u3002\r\n\
+      \r\n\u4ECA\u5929\u901A\u8FC7\u5B9E\u9A8C\u57FA\u672C\u660E\u786E\u4E86\u884C\
+      \u4E3A\u3002\r\n\r\n\u6D4B\u8BD5\u4EE3\u7801\u5982\u4E0B:\r\n\r\n```python\r\
+      \n# -*- coding: utf-8 -*-\r\nfrom flask import Flask, render_template_string,\
+      \ request\r\napp = Flask(__name__)\r\n\r\n\r\n@app.route('/', methods=['get',\
+      \ 'post'])\r\ndef hello_world():\r\n    content = \"hahah\\rjiji\"\r\n    if\
+      \ request.method == \"POST\":\r\n        print repr(request.form[\"content\"\
+      ])\r\n        content = request.form[\"content\"]\r\n    tpl = \"\"\"\r\n  \
+      \  <form action=\"\" method=\"post\">\r\n        <textarea name=\"content\"\
+      >{{ content }}</textarea>\r\n        <input type=\"submit\" value=\"Submit\"\
+      >\r\n    </form>\r\n    \"\"\"\r\n    return render_template_string(tpl, content=content)\r\
+      \n\r\nif __name__ == '__main__':\r\n    app.run(debug=True)\r\n```\r\n\r\n###\
+      \ \u9875\u9762\u6E32\u67D3\r\n\r\n\u8FD9\u4E2A\u8FC7\u7A0B\u670D\u52A1\u5668\
+      \u7AEF Web \u6846\u67B6\u662F\u6CA1\u6709\u884C\u4E3A\u4E86\uFF0C\u8BE5\u662F\
+      \u4EC0\u4E48\u8FD8\u662F\u4EC0\u4E48\u3002\u6240\u4EE5\u5BA2\u6237\u7AEF\u5F97\
+      \u5230\u7684\u5185\u5BB9\u5982\u4E0B:\r\n\r\n```python\r\n>>> import urllib\r\
+      \n>>> urllib.urlopen(\"http://localhost:5000/\").read()\r\n'\\n    <form action=\"\
+      \" method=\"post\">\\n        <textarea name=\"content\">hahah\\rjiji</textarea>\\\
+      n        <input type=\"submit\" value=\"Submit\">\\n    </form>\\n    '\r\n\
+      ```\r\n\r\nTextArea \u91CC\u9762\u4F9D\u7136\u662F\u539F\u6837\u7684`hahah\\\
+      riji`\u3002\u4F46\u662F\u6211\u8BD5\u4E86 Mac \u548C Windows \u4E0A\u7684 Chrome\uFF0C\
+      \u90FD\u80FD\u6B63\u5E38\u5C06`\\r`\u89E3\u6790\u6210\u6362\u884C\u3002\r\n\r\
+      \n\r\n### \u8868\u5355\u63D0\u4EA4\r\n\r\n\u8FD8\u662F\u5206\u522B\u5728 Windows\
+      \ \u548C Mac \u4E0A\u90FD\u8BD5\u4E86\uFF0CTextArea \u91CC\u9762\u7684\u6362\
+      \u884C\u5728\u63D0\u4EA4\u65F6\uFF0C\u90FD\u4F1A\u88AB\u6D4F\u89C8\u5668\u7EDF\
+      \u4E00\u6210`\\r\\n`\u7684\u5F62\u6001\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.204477+00:00
+    updated_at: 2017-08-15 14:49:06.763837+00:00
+    tags: [4]
+- model: wiki.page
+  pk: 13
+  fields:
+    slug: home-brew
+    title: Home-Brew
+    content: "## Library SSL\r\n\r\n\u6709\u65F6\u5019\u5373\u4F7F\u5B89\u88C5\u4E86\
+      \ `openssl`\uFF0C\u7F16\u8BD1\u4E00\u4E9B\u4EE3\u7801\u7684\u65F6\u5019\u8FD8\
+      \u662F\u4F1A\u627E\u4E0D\u5230 SSL \u8FD9\u4E2A\u5E93\uFF08\u6BD4\u5982 `pip\
+      \ install MySQL-Python`\uFF09\uFF0C\u8FD9\u79CD\u60C5\u51B5\u4E0B\u53EF\u4EE5\
+      \u624B\u52A8\u6307\u5B9A\u5305\u542B\u641C\u7D22\u76EE\u5F55\uFF1A\r\n\r\n```bash\r\
+      \nLDFLAGS=\"-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib\"\
+      \ pip install MySQL-Python\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.204701+00:00
+    updated_at: 2017-08-15 14:48:57.068130+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 14
+  fields:
+    slug: home
+    title: Home
+    content: "Good good study, day day up.\n\n\n## Language\n\n[[Python]], [[Ruby]],\
+      \ [[Bash]], [[HTML]]\n\n## Development: Framework & DataBase\n\n[[Rails]], [[Django]],\
+      \ [[Alembic]], [[DataBase Concurrency]], [[Tornado]], [[Gunicorn]], [[SqlAlchemy]]\n\
+      \n## System\n\n[[Docker]], [[UFW]], [[Ubuntu]], [[Home Brew]], [[Mac]]\n\n##\
+      \ Tools\n\n[[Ngrok]], [[Omni]], [[JQ]], [[Git]], [[Vim]], [[VS Code]], [[Atom]],\
+      \ [[ZSH]]\n\n\n## \u5176\u5B83\n\n[[Gollum]], [[Proxy]], [[Kindle]], [[Shell]],\
+      \ [[Mirrors]], [[VPS]], [[Windows7]], [[Jenkins]]\n"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.204823+00:00
+    updated_at: 2017-08-15 14:31:47.204837+00:00
+    tags: []
+- model: wiki.page
+  pk: 15
+  fields:
+    slug: jq
+    title: JQ
+    content: "> jq is a lightweight and flexible command-line JSON processor.\r\n\r\
+      \n\u6587\u6863\u5728[\u8FD9\u91CC](https://stedolan.github.io/jq/manual/)\u3002\
+      \r\n\r\n\u4F8B1\uFF0C\u67E5\u770B\u67D0\u4E2A\u7528\u6237\u7684\u8BF7\u6C42\u8BB0\
+      \u5F55\r\n```bash\r\ncat app.giftpack.api.access.log | grep 3e3f805ec7fe47c9b9f245dfe3d74d82\
+      \ | jq '.method + \" \" + .path'\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.205164+00:00
+    updated_at: 2017-08-15 14:48:17.253963+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 16
+  fields:
+    slug: jenkins
+    title: Jenkins
+    content: "\u7528\u9A6C\u7532 QQ \u90AE\u7BB1\uFF0C\u7ED1\u5B9A\u4E86\u4E00\u4E2A\
+      \ jk@graycarl.me \u7684\u57DF\u540D\u90AE\u7BB1\u3002\u5F00\u901A\u4E86\u8FD9\
+      \u4E2A\u90AE\u7BB1\u7684 Smtp \u670D\u52A1\uFF0C\u7136\u540E\u914D\u7F6E Jenkins\
+      \ \u4F7F\u7528\u8FD9\u4E2A SMTP\uFF0C\u7ED3\u679C\u5728\u6D4B\u8BD5\u7684\u65F6\
+      \u5019\u4E00\u76F4\u51FA\u8FD9\u6837\u7684\u9519\u8BEF:\r\n\r\n```\r\n501 mail\
+      \ from address must be same as authorization user ;\r\n```\r\n\r\n\u7ED3\u679C\
+      \u53D1\u73B0\u662F\u5168\u5C40\u8BBE\u7F6E\u91CC\u9762\u8FD8\u9700\u8981\u914D\
+      \u7F6E\u4E00\u4E0B **\u7CFB\u7EDF\u7BA1\u7406\u5458\u90AE\u4EF6\u5730\u5740\
+      **\uFF0C\u914D\u7F6E\u5B8C\u5C31 OK \u4E86\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.205437+00:00
+    updated_at: 2017-08-15 14:48:07.631445+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 17
+  fields:
+    slug: kindle
+    title: Kindle
+    content: "\u4E3A\u4E86\u89E3\u51B3 Kindle for Mac \u7684\u5B57\u4F53\u95EE\u9898\
+      \uFF0C\u53C2\u8003\u4E86 <https://www.zhihu.com/question/21507431> \u5904\u7406\
+      \u4E86\u4E00\u4E0B\u3002\n\n\u5907\u4EFD\u7684\u5B57\u4F53\uFF0C\u653E\u5728\
+      \ Nas/Main/Kindle \u4E0B\u9762\u4E86\u3002\n\n\u4FEE\u6539\u540E\u7684 STSong\
+      \ \u653E\u5728 CloudDrive/Trans \u91CC\u9762\u3002\n\nMacbook \u4E0A\u7684\u201C\
+      \u771F\u201D\u5B8B\u4F53\u53EA\u662F\u505C\u7528\u4E86\uFF0C\u7136\u540E\u52A0\
+      \u5165\u4E86\u5047\u7684 STSong\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.205697+00:00
+    updated_at: 2017-08-15 14:31:47.205709+00:00
+    tags: []
+- model: wiki.page
+  pk: 18
+  fields:
+    slug: mac
+    title: Mac
+    content: "## \u8F93\u5165\u6CD5\u5207\u6362\u5931\u7075\r\n\r\n\u4E00\u79CD\u53EF\
+      \u80FD\u662F `Cmd+Space` \u8FD9\u4E2A\u5FEB\u6377\u952E\u4E0E Siri \u7684\u5FEB\
+      \u6377\u952E\u51B2\u7A81\u4E86\uFF0C\u5FEB\u53BB\u68C0\u67E5\u4E00\u4E0B\u5427\
+      \u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.205944+00:00
+    updated_at: 2017-08-15 14:47:48.980330+00:00
+    tags: [7]
+- model: wiki.page
+  pk: 19
+  fields:
+    slug: mirrors
+    title: Mirrors
+    content: "## Ubuntu\n\n<https://lug.ustc.edu.cn/wiki/mirrors/help/ubuntu>\n\n\
+      ```\nsudo sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list\n\
+      ```\n\n## PyPI\n\n<https://lug.ustc.edu.cn/wiki/mirrors/help/pypi>\n\n```\n\
+      index-url = https://mirrors.ustc.edu.cn/pypi/web/simple\n```\n\n## Debian\n\n\
+      <https://lug.ustc.edu.cn/wiki/mirrors/help/debian>\n\n```\nsudo sed -i 's/httpredir.debian.org/mirrors.ustc.edu.cn/g'\
+      \ /etc/apt/sources.list\n```\n\n## Ruby Gems\n\n<https://ruby.taobao.org/>\n\
+      \n<http://gems.ruby-china.org/>\n\n```bash\n$ gem sources --add https://ruby.taobao.org/\
+      \ --remove https://rubygems.org/\n$ gem sources -l\n*** CURRENT SOURCES ***\n\
+      \nhttps://ruby.taobao.org\n# \u8BF7\u786E\u4FDD\u53EA\u6709 ruby.taobao.org\n\
+      $ gem install rails\n```\n\n```bash\n$ bundle config mirror.https://rubygems.org\
+      \ https://ruby.taobao.org\n```\n"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.206221+00:00
+    updated_at: 2017-08-15 14:31:47.206232+00:00
+    tags: []
+- model: wiki.page
+  pk: 20
+  fields:
+    slug: ngrok
+    title: Ngrok
+    content: "\u597D\u4E1C\u897F\uFF0C\u81EA\u5DF1\u770B\u6587\u6863\u5427\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.206379+00:00
+    updated_at: 2017-08-15 14:47:30.786205+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 21
+  fields:
+    slug: omni
+    title: Omni
+    content: "\u8FD9\u662F\u516C\u53F8\u8FD9\u8FB9\u7684\u76D7\u7248 Key\uFF0C\u5982\
+      \u679C\u7528\u7684\u6BD4\u8F83\u597D\u7684\u8BDD\uFF0C\u5C31\u4E70\u6B63\u7248\
+      \u652F\u6301\u4E00\u4E0B\u5427\u3002\r\n\r\n- OmniFocus (test EMJN-QBXN-TNNP-HGBS-IRKS-QEMI-RKS)\r\
+      \n- OmniOutliner (test KJZV-NQAM-VFTS-ZEBJ-WKCN-KEMW-KCN)"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.206636+00:00
+    updated_at: 2017-08-15 14:47:20.380854+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 22
+  fields:
+    slug: proxy
+    title: Proxy
+    content: "## Terminal\r\n\r\nTerminal \u4E2D\u8BBE\u7F6E\u73AF\u5883\u53D8\u91CF\
+      \u5373\u53EF\u542F\u7528\u4EE3\u7406\uFF0C\u5927\u90E8\u5206\u7A0B\u5E8F\u90FD\
+      \u4F1A\u4F7F\u7528\u8FD9\u4E2A\u73AF\u5883\u53D8\u91CF\u6765\u4F5C\u4E3A\u81EA\
+      \u5DF1\u7684\u4EE3\u7406\u3002 \r\n\r\n```bash\r\nexport http_proxy=http://domain.com:8888/\r\
+      \nexport https_proxy=http://domain.com:8888/\r\n```\r\n\r\n\u4F46\u662F\u8FD9\
+      \u79CD\u65B9\u5F0F\u5E76\u4E0D\u652F\u6301 socks5 \u7684\u4EE3\u7406\uFF0C\u4EE5\
+      \u53CA https \u7684\u4EE3\u7406\u3002\r\n\r\n## CURL\r\n\r\n\u5F88\u591A\u7A0B\
+      \u5E8F\u5185\u90E8\u90FD\u4F1A\u9ED8\u8BA4\u8C03\u7528 curl \u6765\u8FDE\u63A5\
+      \u7F51\u7EDC\uFF0C\u6240\u4EE5\u53EA\u8981\u8BBE\u7F6E\u4E86 curl \u7684\u4EE3\
+      \u7406\uFF0C\u5C31\u80FD\u89E3\u51B3\u4E0D\u5C11\u7A0B\u5E8F\u7684\u8FDE\u63A5\
+      \u95EE\u9898\uFF08\u6BD4\u5982 Homebrew\uFF09\u3002curl \u9664\u4E86\u4F7F\u7528\
+      \u4E0A\u9762\u63D0\u5230\u7684 http_proxy \u73AF\u5883\u53D8\u91CF\u4EE5\u5916\
+      \uFF0C\u8FD8\u652F\u6301\u901A\u8FC7\u914D\u7F6E\u6587\u4EF6\u8BBE\u7F6E socks5\
+      \ \u4EE3\u7406\u3002\r\n\r\n```\r\n# cat ~/.curlrc\r\nsocks5 = \"127.0.0.1:1080\"\
+      \r\n```\r\n\r\n## Git\r\n\r\nGit \u7684\u4EE3\u7406\u4E5F\u662F\u53EF\u4EE5\u5355\
+      \u72EC\u8BBE\u7F6E\u7684\uFF0C\u5E76\u4E14\u4E5F\u652F\u6301 socks5:\r\n\r\n\
+      ```\r\n# cat ~/.gitconfig\r\n\r\n[http]\r\nproxy = http://domain.com:8888\r\n\
+      proxy = socks5://domain.com:8888\r\n\r\n[https]\r\nproxy = http://domain.com:8888\r\
+      \nproxy = socks5://domain.com:8888\r\n```\r\n\r\n## Socks5 to Http\r\n\r\nUse\
+      \ polipo tools:\r\n\r\n- install polipo\r\n- polipo socksParentProxy=localhost:1080\r\
+      \n- http_proxy=http://localhost:8123 curl www.google.com\r\n\r\n## Alfred &\
+      \ Shadowsocks & SwitchyOmega\r\n\r\n\u5DF2\u7ECF\u5199\u4E86\u4E00\u4E2A Alfred\
+      \ Workflow \u6765\u63A7\u5236\u672C\u5730 Shadowsocks \u5BA2\u6237\u7AEF\u7684\
+      \u8FD0\u884C\u3002\r\n\r\n\u672C\u5730 sslocal \u4F1A\u63D0\u4F9B\u4E00\u4E2A\
+      \ localhost:1080 \u7684 socks5 \u7684\u4EE3\u7406\uFF0C\u914D\u5408 Chrome \u7684\
+      \ SwitchyOmega \u63D2\u4EF6\u53EF\u4EE5\u5F88\u65B9\u4FBF\u5E72\u51C0\u7684\u4F7F\
+      \u7528\u4E86\u3002\r\n\r\n## \u5173\u4E8E Squid \u642D\u5EFA\u7684 HTTP \u4EE3\
+      \u7406\r\n\r\n\u901A\u5E38\u8FD8\u662F\u4F1A\u88AB\u62E6\u4E0B\u6765\u7684\uFF0C\
+      \u56E0\u4E3A\u5BA2\u6237\u7AEF\u8FD8\u662F\u4F1A\u660E\u6587\u7ECF\u8FC7 gfw\
+      \ \u6765\u5411\u670D\u52A1\u5668\u53D1\u9001\u6570\u636E\u3002\u4E0D\u8FC7\uFF0C\
+      \u5982\u679C\u4F7F\u7528 25 \u7AEF\u53E3\u7684\u8BDD\u5C31\u662F ok \u7684\u3002\
+      \r\n\r\n## PPTP and UFW\r\n\r\n\u5F53 ufw \u5F00\u542F\u540E\uFF0Cvpn \u65E0\
+      \u6CD5\u94FE\u63A5\uFF0C\u5373\u4F7F\u5DF2\u7ECF`ufw allow 1723`\u4E5F\u8FD8\
+      \u662F\u4E0D\u884C\u3002\r\n\r\n\u9700\u8981\u5C06\u4E0B\u9762\u8FD9\u884C\u52A0\
+      \u5165 /etc/ufw/before.rules \u4E2D\u7684 `#drop INVALID packages...` \u4E4B\
+      \u524D\u3002\r\n\r\n```\r\n-A ufw-before-input -p 47 -j ACCEPT\r\n```\r\n\r\n\
+      \u5728\u628A\u4E0B\u9762\u8FD9\u4E9B\u52A0\u5230\u6700\u524D\u9762\r\n```\r\n\
+      # NAT table rules\r\n*nat\r\n:POSTROUTING ACCEPT [0:0]\r\n# Allow forward traffic\
+      \ to eth0\r\n-A POSTROUTING -s 10.99.99.0/24 -o eth0 -j MASQUERADE\r\n# Process\
+      \ the NAT table rules\r\nCOMMIT\r\n```\r\n\r\n\u6700\u540E\u5728 /etc/default/ufw\
+      \ \u4E2D\r\n```\r\nDEFAULT_FORWARD_POLICY=\"ACCEPT\"\r\n```\r\n\r\n**NOTE:**\
+      \ \u7ED3\u679C\u5347\u7EA7\u4E86 MacOS \u4E4B\u540E\u53D1\u73B0 pptp \u7684\u9009\
+      \u9879\u76F4\u63A5\u88AB\u5E9F\u5F03\u4E86\uFF0C\u6240\u4EE5\u5C31\u628A vps\
+      \ \u4E0A\u7684 pptp server \u5220\u9664\u4E86\uFF0C\u91CD\u65B0\u914D\u7F6E\u4E86\
+      \ ipsec\u3002\r\n\r\n## IPSec\r\n\r\n\u4F9D\u7136\u4F7F\u7528 Docker \u8FD0\u884C\
+      \u7684\uFF0C\u76F4\u63A5\u4F7F\u7528 Published \u955C\u50CF `hwdsl2/ipsec-vpn-server`\
+      \ \u6309\u7167\u8BF4\u660E\u8FD0\u884C\u5C31\u884C\u4E86\u3002\u5C45\u7136\u6BD4\
+      \ PPTP \u8FD8\u8981\u65B9\u4FBF\u3002\r\n\r\n\u4E0D\u8FC7\u4F7F\u7528\u7684\u4F7F\
+      \u7528\u8FD8\u662F\u9047\u5230\u4E86\u95EE\u9898\u3002\u6F2B\u5496\u5561\u7684\
+      \ wifi \u76F4\u63A5\u8FDE\u63A5\u4E0D\u4E0A\u3002\r\n\r\n## Set Proxy by Script\r\
+      \n\r\n```bash\r\n/usr/sbin/networksetup -setautoproxyurl Wi-Fi http://localhost:222/aa.pac\r\
+      \n/usr/sbin/networksetup -setautoproxystate Wi-Fi on\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.206898+00:00
+    updated_at: 2017-08-15 14:47:11.202498+00:00
+    tags: [8, 11]
+- model: wiki.page
+  pk: 23
+  fields:
+    slug: python
+    title: Python
+    content: "## Gevent\r\n\r\n\u5F88\u597D\u7684\u6587\u6863\uFF1Ahttp://xlambda.com/gevent-tutorial/\r\
+      \n\r\n## SetProcTitle\r\n\r\n\u8FD9\u4E2A\u5E93\u53EF\u4EE5\u7528\u6765\u7F8E\
+      \u5316\u8FDB\u7A0B\u540D\u79F0\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.207129+00:00
+    updated_at: 2017-08-15 14:46:22.277914+00:00
+    tags: [4]
+- model: wiki.page
+  pk: 24
+  fields:
+    slug: rails
+    title: Rails
+    content: "## Studying\r\n\r\n\u300CWeb \u5F00\u53D1\u654F\u6377\u4E4B\u9053\u300D\
+      \uFF0D \u672C\u6765\u6253\u7B97\u628A\u91CC\u9762\u7684\u793A\u4F8B\u5168\u90E8\
+      \u6572\u4E00\u904D\u7684\uFF0C\u7ED3\u679C\u53D1\u73B0\u5B83\u5BF9\u5E94\u7684\
+      \ ruby \u7248\u672C\u592A\u4F4E\u3002\u6211\u901A\u8FC7 rbenv \u5B89\u88C5\u4E86\
+      \ 1.8.7 \u7684\u7248\u672C\u540E\uFF0C\u53D1\u73B0\u8FD8\u662F\u6709\u4E00\u4E9B\
+      \u6807\u51C6\u5E93\u4E0D\u517C\u5BB9\u3002\u6240\u4EE5\u73B0\u5728\u770B\u6765\
+      \u53EA\u80FD\u76F4\u63A5\u628A\u4E66\u8BFB\u4E00\u904D\u5C31\u7B97\u4E86\u5427\
+      \u3002\r\n\r\n\u300CRuby on Rails \u6559\u7A0B\u300D - \u8FD9\u4E2A\u662F\u4E0B\
+      \u4E00\u6B65\u7684\u8BA1\u5212\uFF0C\u4E70\u4E2A\u6700\u65B0\u7248\u672C\u7684\
+      \u7535\u5B50\u4E66\u5E94\u8BE5\u4F1A\u6BD4\u8F83\u597D\u7528\u3002\r\n\r\n###\
+      \ NOTE\r\n\r\n+ \"blabla #{name}\" \u8FD9\u91CC\u7684\u6A21\u677F\u89E3\u6790\
+      \u4F7F\u7528\u4EC0\u4E48\u65B9\u5F0F\u5C06 `name` \u8F6C\u5316\u6210 String\uFF1F\
+      \r\n+ \u6587\u6863\u5408\u96C6: http://rails.documentation.codyrobbins.com\uFF1B\
+      \r\n+ [Ruby on Rails \u5BE6\u6230\u8056\u7D93](https://ihower.tw/rails4/index.html)\
+      \ \u4F7F\u7528 Rails 4.2 \u4E14\u662F\u4E2D\u6587\u7684\uFF0C\u5E94\u8BE5\u503C\
+      \u5F97\u4E00\u770B\uFF1B"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.207314+00:00
+    updated_at: 2017-08-15 14:46:15.146634+00:00
+    tags: [5]
+- model: wiki.page
+  pk: 25
+  fields:
+    slug: ruby
+    title: Ruby
+    content: "[[Block\uFF0CProc\uFF0CLambda \u7684\u533A\u522B|https://ruby-china.org/topics/10414]]"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.207468+00:00
+    updated_at: 2017-08-15 14:46:07.807339+00:00
+    tags: [4]
+- model: wiki.page
+  pk: 26
+  fields:
+    slug: shell
+    title: Shell
+    content: "## \u4E00\u4E9B\u5B58\u6863\r\n\r\n### \u6253\u5F00 VimWiki \u7684\u5FEB\
+      \u6377\u547D\u4EE4\r\n\r\n```bash\r\nalias mwiki='mvim \"+colo automation\"\
+      \ \"+VimwikiIndex\" \"+Goyo\" \"+ set guifont=M+\\ 1m\\ regular:h16\"'\r\nalias\
+      \ wiki='vim \"+colo soso\" \"+VimwikiIndex\" \"+Goyo\"'\r\n```\r\n\r\n### \u8BBE\
+      \u7F6E\u4EE3\u7406\r\n\r\n```bash\r\n# Get Qujing\r\nfunction getqujing() {\r\
+      \n    export http_proxy='http://theironislands.f.getqujing.net:28471' \r\n \
+      \   export https_proxy='https://theironislands.f.getqujing.net:28471'\r\n}\r\
+      \nfunction dropqujing() {\r\n    unset http_proxy\r\n    unset https_proxy\r\
+      \n}\r\nfunction getpanda() {\r\n    export http_proxy='http://47565:62aa147d@hk1.dig.name:25'\
+      \ \r\n    export https_proxy='http://47565:62aa147d@hk1.dig.name:25' \r\n}\r\
+      \nfunction droppanda() {\r\n    unset http_proxy\r\n    unset https_proxy\r\n\
+      }\r\nfunction getvpnso() {\r\n    export http_proxy='https://graycarl:5dd8909c5@SG04.60in.com:443'\
+      \ \r\n    export https_proxy='https://graycarl:5dd8909c5@SG04.60in.com:443'\
+      \ \r\n}\r\nfunction dropvpnso() {\r\n    unset http_proxy\r\n    unset https_proxy\r\
+      \n}\r\n```\r\n\r\n### \u6696\u4E18\u5F00\u53D1\r\n\r\n```bash\r\n# WarmChat\
+      \ Dev\r\nexport WARMCHAT_RUN=/tmp/warmchat-run\r\nfunction nuanqiu-sb() {\r\n\
+      \    method=$1\r\n    p=$2\r\n    shift 2\r\n    nuanqiu-client nnsb https://api-sb.nuanqiu.me\
+      \ $method $p $@\r\n}\r\nfunction nuanqiu-aws() {\r\n    method=$1\r\n    p=$2\r\
+      \n    shift 2\r\n    nuanqiu-client nnsb https://api.nuanqiu.me $method $p $@\r\
+      \n}\r\nfunction xiaoqiu-sb() {\r\n    method=$1\r\n    p=$2\r\n    shift 2\r\
+      \n    nuanqiu-client nnsb https://xq-sb.nuanqiu.me/api/v1 $method $p $@\r\n\
+      }\r\nfunction xiaoqiu-ws() {\r\n    tools/wsclient.py wss://xq-sb.nuanqiu.me/api/v1/ws/messages\
+      \ UON3kPiIE5CGQZo7mkFTBAOjbRNsW9Rf\r\n}\r\n\r\nfunction nuanqiu-client() {\r\
+      \n    session=$1\r\n    urlbase=$2\r\n    method=$3\r\n    p=$4\r\n    shift\
+      \ 4\r\n\r\n    cmd=\"http -f --session $session $method $urlbase$p $@\"\r\n\
+      \    echo $cmd\r\n    eval $cmd\r\n}\r\n```\r\n\r\n### Polipo\r\n\r\n```bash\r\
+      \n# Polipo\r\nfunction polipo-start() {\r\n    if `pgrep -q polipo`; then\r\n\
+      \        echo 'Polipo is running.'\r\n        pgrep -fl polipo\r\n    else\r\
+      \n        nohup polipo socksParentProxy=localhost:1080 >> /tmp/polipo.log &\r\
+      \n        disown\r\n        echo \"Polipo is started, Ctrl-C to detach.\"\r\n\
+      \        tail -f /tmp/polipo.log\r\n    fi\r\n}\r\nfunction polipo-stop() {\r\
+      \n    if `pkill polipo`; then\r\n        echo 'Polipo stopped.'\r\n    else\r\
+      \n        echo 'Nothing found.'\r\n    fi\r\n}\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.207621+00:00
+    updated_at: 2017-08-15 14:46:00.073708+00:00
+    tags: [4]
+- model: wiki.page
+  pk: 27
+  fields:
+    slug: sqlalchemy
+    title: SqlAlchemy
+    content: "## \u6253\u5370\u5EFA\u8868\u8BED\u53E5\r\n\r\n```python\r\nfrom sqlalchemy.schema\
+      \ import CreateTable\r\nprint CreateTable(Model.__table__).compile(engine)\r\
+      \n```\r\n\r\n\u53C2\u8003: <http://stackoverflow.com/questions/2128717/sqlalchemy-printing-raw-sql-from-create>"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.207768+00:00
+    updated_at: 2017-08-15 14:45:34.294853+00:00
+    tags: [6]
+- model: wiki.page
+  pk: 28
+  fields:
+    slug: tornado
+    title: Tornado
+    content: <https://mirrors.segmentfault.com/itt2zh/index.html>
+    visit_count: 1
+    visit_last_at: 2017-08-15 14:51:06.245454+00:00
+    created_at: 2017-08-15 14:31:47.207912+00:00
+    updated_at: 2017-08-15 14:51:06.246690+00:00
+    tags: [5]
+- model: wiki.page
+  pk: 29
+  fields:
+    slug: ufw
+    title: UFW
+    content: "## UFW\r\n\r\n### Enable/Disable\r\n\r\n\u9996\u5148\uFF0C\u5B83\u5E94\
+      \u8BE5\u662F\u6CA1\u6709\u8FD0\u884C\u548C\u505C\u6B62\u7684\u72B6\u6001\u7684\
+      \uFF0C\u56E0\u4E3A\u5B83\u672C\u8EAB\u5C31\u662F\u4E00\u4E2A\u8FD0\u884C\u4E00\
+      \u4E0B\u5C31\u7ED3\u675F\u7684\u5DE5\u5177\u3002\u4F46\u662F\uFF0C\u5F53\u6267\
+      \u884C`sudo ufw enable/disable`\u7684\u65F6\u5019\uFF0C\u5B83\u4F1A\u5BF9\u5E94\
+      \u5F00\u542F/\u505C\u6B62`iptables`\uFF0C\u5E76\u4E14\u4FEE\u6539\u81EA\u5DF1\
+      \u662F\u5426\u5728\u7CFB\u7EDF\u542F\u52A8\u65F6\u81EA\u52A8\u8FD0\u884C\u7684\
+      \u914D\u7F6E\u3002\r\n\r\n### \u5982\u4F55\u5199\u914D\u7F6E\u6587\u4EF6\u8BA9\
+      \u5B83\u542F\u52A8\u65F6\u81EA\u52A8\u52A0\u8F7D\u5462\uFF1F\r\n\r\n\u8FD9\u4E2A\
+      \u95EE\u9898\u7684\u7B54\u6848\u662F\uFF0C\u8FD9\u4E2A\u5B8C\u5168\u7528\u4E0D\
+      \u7740\u3002\u56E0\u4E3A\u6211\u4EEC\u6BCF\u6B21\u76F4\u63A5\u4F7F\u7528`ufw\
+      \ allow ssh`\u6765\u4FEE\u6539\u9632\u706B\u5899\u7B56\u7565\u7684\u65F6\u5019\
+      \uFF0C\u5B83\u5176\u5B9E\u90FD\u662F\u81EA\u5DF1\u751F\u6210\u4E86\u5F53\u524D\
+      \u72B6\u6001\u7684\u914D\u7F6E\u6587\u4EF6\u4E86\u3002\u4E5F\u5C31\u662F\u8BF4\
+      \uFF0C\u8FD9\u4E2A\u914D\u7F6E\u5DF2\u7ECF\u4FDD\u5B58\u4E0B\u6765\u4E86\uFF0C\
+      \u7CFB\u7EDF\u91CD\u542F\u4E4B\u540E\u4E5F\u4F1A\u7EE7\u7EED\u751F\u6548\u3002\
+      \u8FD9\u4E9B\u914D\u7F6E\u6587\u4EF6\u653E\u5728`/lib/ufw/`\u8FD9\u4E2A\u76EE\
+      \u5F55\u4E0B\u9762\u4E86\u3002\r\n\r\n### \u5982\u4F55\u5B9A\u4E49 Application\
+      \ \u5E76\u81EA\u52A8\u542F\u7528\u5462\r\n\r\n\u5176\u5B9Eufw\u662F\u53EF\u4EE5\
+      \u81EA\u52A8\u8BC6\u522B`/etc/services`\u91CC\u9762\u7684\u8FD9\u79CD\u670D\u52A1\
+      \u540D\u79F0\u7684\uFF0C\u6240\u4EE5\u8FD9\u4E2AApplication\u5FC5\u8981\u6027\
+      \u5C31\u4E0D\u5927\u4E86\u3002\r\n\r\n\u5982\u679C\u4E00\u5B9A\u8981\u4F7F\u7528\
+      \uFF0C\u8BB0\u4F4F\u4E24\u70B9\u3002\r\n\r\n1. \u9ED8\u8BA4\u6DFB\u52A0\u4E86\
+      \u4E00\u4E2AApplication\u4E4B\u540E\uFF0Cufw\u7684\u884C\u4E3A\u662F\u7531\u914D\
+      \u7F6E\u6587\u4EF6`/etc/default/ufw`\u6307\u5B9A\u7684\uFF0C\u9ED8\u8BA4\u4E3A\
+      `skip`\u3002\r\n2. \u6DFB\u52A0\u5B8C\u4E00\u4E2AApplication\u4E4B\u540E\uFF0C\
+      \u8FD8\u662F\u50CF\u90A3\u4E9B\u666E\u901A\u7684\u547D\u4EE4\u4E00\u6837\uFF0C\
+      \u624B\u52A8\u53BB`allow/deny`\u5C31\u884C\u4E86\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.208063+00:00
+    updated_at: 2017-08-15 14:45:13.470281+00:00
+    tags: [8, 9]
+- model: wiki.page
+  pk: 30
+  fields:
+    slug: ubuntu
+    title: Ubuntu
+    content: "## Setup Timezone\r\n\r\n\u65B9\u6CD51\r\n```bash\r\nsudo dpkg-reconfigure\
+      \ tzdata\r\n```\r\n\r\n\u6216\u8005\u76F4\u63A5\u6DFB\u52A0\u9ED8\u8BA4\u73AF\
+      \u5883\u53D8\u91CF\r\n```bash\r\necho TZ=\\\"Asia/Shanghai\\\" >> /etc/environment\r\
+      \n```\r\n\r\n\u5728 Docker \u4E2D\uFF0C\u53EF\u4EE5\u76F4\u63A5\u73AF\u5883\u53D8\
+      \u91CF\u5728\u8BBE\u7F6E\u65F6\u533A\uFF0C\u6BD4\u5982\r\n```sh\r\n$ export\
+      \ TZ=Asia/Shanghai\r\n$ date\r\nSun Aug 14 23:04:41 CST 2016\r\n```\r\n\r\n\
+      ## fail2ban & denyhosts\r\n\r\n\u5C01\u9501\u591A\u6B21 ssh \u767B\u5F55\u5931\
+      \u8D25\u7684 ip\uFF0C\u6709\u4E24\u4E2A\u9009\u62E9 fail2ban \u548C denyhosts\u3002\
+      \r\n\r\n## swap\r\n\r\n\u4E34\u65F6\u589E\u52A0 swap \u5206\u533A\uFF1A\r\n\
+      ```bash\r\n$ sudo dd if=/dev/zero of=/swap bs=1023 count=100k\r\n$ sudo mkswap\
+      \ /swap\r\n$ sudo swapon /swap\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.208216+00:00
+    updated_at: 2017-08-15 14:45:02.273445+00:00
+    tags: [7]
+- model: wiki.page
+  pk: 31
+  fields:
+    slug: vps
+    title: VPS
+    content: "## Bandwagon Host Setup\n\nBandwagon provides OpenVZ VPS. It's a container\
+      \ indeed, and can not run some virtualization  services like docker.\n\n1. Buy\
+      \ a new vps\n2. Open KiviVM Console\n3. Install new OS: Ubuntu-14.04\n4. Login\
+      \ with specified port and root password given by the console.\n5. Install basic\
+      \ packages: language-pack-zh-hans htop tmux\n6. Add user with strong password\
+      \ and sudoer Group:\n\n        useradd hongbo\n        usermod -aG sudo hongbo\n\
+      \        visudo # add NOPASSWD for sudo group\n\n7. Change ssh port to default\
+      \ in /etc/ssh/sshd_config\n7. Set Pubkey for hongbo: ssh-copy-id\n8. Login with\
+      \ hongbo\n9. Disable root login in /etc/ssh/sshd_config and restart sshd\n10.\
+      \ Setup timezone: `sudo dpkg-reconfigure tzdata`\n\n\n## Relations\n\n[[Let's\
+      \ Encrypt|letsencrypt]], [[Ubuntu]]\n"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.208372+00:00
+    updated_at: 2017-08-15 14:31:47.208386+00:00
+    tags: []
+- model: wiki.page
+  pk: 32
+  fields:
+    slug: vs-code
+    title: VS-Code
+    content: "## Plugins\r\n\r\n- amVim\r\n- Python\r\n- reStructuredText\r\n\r\n\
+      ## Exclude files from <kbd>CMD+P</kbd>\r\n\r\n```\r\n    \"search.exclude\"\
+      : {\r\n        \"**/node_modules\": true,\r\n        \"**/bower_components\"\
+      : true,\r\n        \"**/venv\": true\r\n    }\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.208664+00:00
+    updated_at: 2017-08-15 14:44:20.923039+00:00
+    tags: [8, 10]
+- model: wiki.page
+  pk: 33
+  fields:
+    slug: vim
+    title: Vim
+    content: http://cocopon.me/app/vim-color-gallery
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.208940+00:00
+    updated_at: 2017-08-15 14:44:32.879289+00:00
+    tags: [8, 10]
+- model: wiki.page
+  pk: 34
+  fields:
+    slug: windows7
+    title: Windows7
+    content: "## Create windows7 install flash drive\r\n\r\nThe correct way If you\
+      \ want to make a  flash drive bootable for installation of Windows. First you\
+      \ have to use a utility like diskpart to do that. Then copying an install DVD\
+      \ or ISO  to it. It  will make it act as a bootable install disk for Windows\
+      \ Installation.\r\n\r\n1. Insert a flash drive ( 8GB )\r\n2. Command Prompt\
+      \ (DOS PROMPT)\r\n3. DISKPART\r\n4. LIST DISK\r\n5. SELECT DISK ( DRIVE NUMBER)\r\
+      \n6. CLEAN\r\n7. CREATE PARTITION PRIMARY\r\n8. SELECT PARTITION 1\r\n9. ACTIVE\r\
+      \n10. FORMAT FS=NTFS\r\n11. ASSIGN\r\n12. EXIT\r\n13. COPY ALL DVD FILES TO\
+      \ FLASHDRIVE"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.209199+00:00
+    updated_at: 2017-08-15 14:43:44.819910+00:00
+    tags: [7]
+- model: wiki.page
+  pk: 35
+  fields:
+    slug: zsh
+    title: ZSH
+    content: "## Hostname auto-completion\r\n\r\n\u81EA\u52A8\u5B8C\u6210\u7684\u5217\
+      \u8868\u53D6\u81EA `~/.ssh/known_hosts`\uFF0C\u53EF\u4EE5\u901A\u8FC7\u4FEE\u6539\
+      \u8FD9\u4E2A\u6587\u4EF6\u6765\u63A7\u5236\u81EA\u52A8\u5B8C\u6210\u7684\u7ED3\
+      \u679C\u3002"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-15 14:31:47.209484+00:00
+    updated_at: 2017-08-15 14:43:37.788176+00:00
+    tags: [8]
+- model: wiki.page
+  pk: 36
+  fields:
+    slug: letsencrypt
+    title: letsencrypt
+    content: "## Usage\r\n\r\n1. Make sure the domain is pointing to the server ip\r\
+      \n2. [Install the tools on server](https://certbot.eff.org/):\r\n\r\n    ```\r\
+      \n    # ubuntu 14.04 sample:\r\n    $ wget https://dl.eff.org/certbot-auto\r\
+      \n    $ chmod a+x certbot-auto\r\n    $ ./certbot-auto\r\n    ```\r\n\r\n3.\
+      \ Install certification:\r\n\r\n    ```\r\n    $ ./certbot-auto certonly\r\n\
+      \    ```\r\n\r\n4. renew:\r\n\r\n    ```\r\n    ./certbot-auto renew --quiet\
+      \ --no-self-upgrade\r\n    ```\r\n\r\n## Root CA Certification\r\n\r\nDownload\
+      \ from here: https://letsencrypt.org/certificates/"
+    visit_count: 1
+    visit_last_at: 2017-08-15 14:38:47.705706+00:00
+    created_at: 2017-08-15 14:31:47.209551+00:00
+    updated_at: 2017-08-15 14:43:05.177442+00:00
+    tags: [8, 9]
+- model: wiki.tag
+  pk: 4
+  fields: {slug: language, text: Language, created_at: !!timestamp '2017-08-15 14:40:55.188852+00:00'}
+- model: wiki.tag
+  pk: 5
+  fields: {slug: framework, text: Framework, created_at: !!timestamp '2017-08-15 14:41:22.956955+00:00'}
+- model: wiki.tag
+  pk: 6
+  fields: {slug: database, text: Database, created_at: !!timestamp '2017-08-15 14:41:33.101608+00:00'}
+- model: wiki.tag
+  pk: 7
+  fields: {slug: system, text: System, created_at: !!timestamp '2017-08-15 14:41:59.317116+00:00'}
+- model: wiki.tag
+  pk: 8
+  fields: {slug: tools, text: Tools, created_at: !!timestamp '2017-08-15 14:42:08.215075+00:00'}
+- model: wiki.tag
+  pk: 9
+  fields: {slug: security, text: Security, created_at: !!timestamp '2017-08-15 14:42:51.148371+00:00'}
+- model: wiki.tag
+  pk: 10
+  fields: {slug: editor, text: Editor, created_at: !!timestamp '2017-08-15 14:44:18.997594+00:00'}
+- model: wiki.tag
+  pk: 11
+  fields: {slug: gfw, text: Great Fire Wall, created_at: !!timestamp '2017-08-15 14:47:02.395336+00:00'}

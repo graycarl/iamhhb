@@ -1,17 +1,16 @@
-import mistune
 from django.db import models
 from django.utils import timezone
-from .libs.markdown import Renderer
+from .libs.markdown import make_markdown
 
 
 class Page(models.Model):
 
-    markdown = mistune.Markdown(renderer=Renderer())
+    markdown = make_markdown()
 
     slug = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    tags = models.ManyToManyField('Tag')
+    tags = models.ManyToManyField('Tag', blank=True)
 
     visit_count = models.PositiveIntegerField(default=0)
     visit_last_at = models.DateTimeField(null=True)

@@ -1,0 +1,46 @@
+- model: wiki.page
+  pk: 1
+  fields:
+    slug: bash
+    title: Bash
+    content: "## PATH\r\n\r\nMAC \u4E2D\u53EF\u4EE5\u76F4\u63A5\u4FEE\u6539 `/etc/paths`\
+      \ \u8FD9\u4E2A\u6587\u4EF6\u6765\u4FEE\u6539 Shell \u4E2D\u9ED8\u8BA4\u7684\
+      \ `$PATH` \u7684\u503C\u3002\r\n\r\nUbuntu \u7CFB\u7EDF\u4E2D\u53EF\u4EE5\u4FEE\
+      \u6539 `/etc/environment` \u6765\u81EA\u5B9A\u4E49\u5404\u79CD\u53D8\u91CF\u7684\
+      \u503C\u3002\r\n\r\n## \u5173\u4E8E\u5F15\u53F7\u548C\u8F6C\u4E49\r\n\r\n1.\
+      \ \u53CC\u5F15\u53F7\u4E2D\u7684\u5185\u5BB9\u4F1A\u8F6C\u4E49\uFF0C\u800C\u5355\
+      \u5F15\u53F7\u4E0D\u4F1A\r\n\r\n```sh\r\ncarl at Carl-MBPR in ~\r\n$ name=hongbo\r\
+      \n\r\ncarl at Carl-MBPR in ~\r\n$ echo \"name is $name\"\r\nname is hongbo\r\
+      \n\r\ncarl at Carl-MBPR in ~\r\n$ echo 'name is $name'\r\nname is $name\r\n\
+      ```\r\n\r\n2. \u4E00\u4E2A\u6280\u5DE7\r\n\r\n```sh\r\ncarl at Carl-MBPR in\
+      \ ~\r\n$ echo \"name is '$name'\"\r\nname is 'hongbo'\r\n```"
+    visit_count: 1
+    visit_last_at: 2017-08-15 13:59:47.226881+00:00
+    created_at: 2017-08-12 06:46:26.967893+00:00
+    updated_at: 2017-08-15 13:59:47.228528+00:00
+    tags: [3]
+- model: wiki.page
+  pk: 2
+  fields:
+    slug: jq
+    title: JQ
+    content: "> jq is a lightweight and flexible command-line JSON processor.\r\n\r\
+      \n\u6587\u6863\u5728[\u8FD9\u91CC](https://stedolan.github.io/jq/manual/)\u3002\
+      \r\n\r\n\u4F8B1\uFF0C\u67E5\u770B\u67D0\u4E2A\u7528\u6237\u7684\u8BF7\u6C42\u8BB0\
+      \u5F55\r\n```bash\r\ncat app.giftpack.api.access.log | grep 3e3f805ec7fe47c9b9f245dfe3d74d82\
+      \ | jq '.method + \" \" + .path'\r\n```"
+    visit_count: 0
+    visit_last_at: null
+    created_at: 2017-08-12 06:47:30.038523+00:00
+    updated_at: 2017-08-12 06:47:30.038993+00:00
+    tags: [1, 3]
+- model: wiki.tag
+  pk: 1
+  fields: {slug: python, text: Python Language, created_at: !!timestamp '2017-08-12
+      06:37:55.351347+00:00'}
+- model: wiki.tag
+  pk: 2
+  fields: {slug: database, text: Database, created_at: !!timestamp '2017-08-12 06:39:13.944503+00:00'}
+- model: wiki.tag
+  pk: 3
+  fields: {slug: linux, text: Linux, created_at: !!timestamp '2017-08-12 06:39:28.211046+00:00'}
