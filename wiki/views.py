@@ -1,5 +1,4 @@
-from django.views import generic, View
-from django.shortcuts import render
+from django.views import generic
 from .models import Page
 
 
@@ -18,3 +17,9 @@ class WikiIndexView(generic.ListView):
 class PageDetailView(generic.DetailView):
     model = Page
     template_name = 'wiki/page.html'
+
+    def get_object(self, *args, **kwargs):
+        obj = super(PageDetailView, self).get_object(*args, **kwargs)
+        obj.record_visit()
+        obj.save()
+        return obj

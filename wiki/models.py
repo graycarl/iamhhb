@@ -1,5 +1,6 @@
 import mistune
 from django.db import models
+from django.utils import timezone
 from .libs.markdown import Renderer
 
 
@@ -37,6 +38,10 @@ class Page(models.Model):
         if not hasattr(self, '_content_toc'):
             self._render_content()
         return self._content_toc
+
+    def record_visit(self):
+        self.visit_count += 1
+        self.visit_last_at = timezone.now()
 
 
 class Tag(models.Model):
