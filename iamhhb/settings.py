@@ -38,7 +38,6 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
-    'postorage.apps.PostorageConfig',
     'webfs.apps.WebfsConfig',
     'blog.apps.BlogConfig',
     'wiki.apps.WikiConfig',

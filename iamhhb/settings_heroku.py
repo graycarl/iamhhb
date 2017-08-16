@@ -13,3 +13,4 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 # Use postgresql storage
 DEFAULT_FILE_STORAGE = 'postorage.storage.PostgreStorage'
+INSTALLED_APPS = ['postorage.apps.PostorageConfig'] + INSTALLED_APPS
