@@ -6,7 +6,11 @@ body.app-blog > .container {
             .image {
                 text-align: right;
                 color: gray;
-                font-size: 120%;
+                //font-size: 120%;
+            }
+            .content .header, .content .description {
+                color: #555;
+                font-weight: lighter;
             }
         }
     }
