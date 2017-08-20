@@ -5,21 +5,30 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 
+awscli==1.11.135
+botocore==1.6.2           # via awscli, s3transfer
 click==6.7                # via pip-tools
+colorama==0.3.7           # via awscli
 dj-database-url==0.4.2
 django-pipeline==1.6.13
 django==1.11.2
+docutils==0.14            # via awscli, botocore
 first==2.0.1              # via pip-tools
 futures==3.1.1            # via django-pipeline
 gunicorn==19.7.1
+jmespath==0.9.3           # via botocore
 libsass==0.13.2
 mistune==0.7.4
 mock==2.0.0
 pbr==3.1.1                # via mock
 pip-tools==1.9.0
 psycopg2==2.7.1
+pyasn1==0.3.2             # via rsa
 pygments==2.2.0
+python-dateutil==2.6.1    # via botocore
 pytz==2017.2              # via django
 pyyaml==3.12
-six==1.10.0               # via libsass, mock, pip-tools
+rsa==3.4.2                # via awscli
+s3transfer==0.1.10        # via awscli
+six==1.10.0               # via libsass, mock, pip-tools, python-dateutil
 whitenoise==3.3.0
