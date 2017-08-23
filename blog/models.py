@@ -17,15 +17,15 @@ class Post(models.Model):
 
     markdown = mistune.Markdown(renderer=Renderer())
 
-    slug = models.SlugField(max_length=100, null=False, blank=False)
-    title = models.CharField(max_length=200, null=False, blank=False)
-    summary = models.CharField(max_length=200, null=False, blank=False)
-    content = models.TextField(null=False, blank=False)
+    slug = models.SlugField(max_length=100, unique=True)
+    title = models.CharField(max_length=200)
+    summary = models.CharField(max_length=200)
+    content = models.TextField()
 
     status = models.CharField(max_length=20, choices=STATUSES)
 
-    created_at = models.DateTimeField(null=False, auto_now_add=True)
-    updated_at = models.DateTimeField(null=False, auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.slug
