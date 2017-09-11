@@ -8,6 +8,7 @@
         <h1>{{ page.title }}</h1>
         <div class="ui divider"></div>
         <p class="tags">
+            <a class="ui basic icon tiny button right floated" href="{% url 'admin:wiki_page_change' page.id %}"><i class="write icon"></i></a>
             {% for tag in page.tags.all %}
             <span class="ui tiny tag label">{{ tag }}</span>
             {% endfor %}
